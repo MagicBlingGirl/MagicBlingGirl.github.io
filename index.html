@@ -334,6 +334,30 @@
 
               <time title="创建时间：2022-05-13 16:18:41" itemprop="dateCreated datePublished" datetime="2022-05-13T16:18:41+08:00">2022-05-13</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-14 01:26:27" itemprop="dateModified" datetime="2022-05-14T01:26:27+08:00">2022-05-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">Linux服务器开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%80%E5%8F%91/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">Linux系统编程</span></a>
+                </span>
+            </span>
 
           
             <span id="/2022/05/13/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E5%85%AD%EF%BC%89%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" class="post-meta-item leancloud_visitors" data-flag-title="Linux系统编程（六）进程间通信" title="阅读次数">
@@ -362,14 +386,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>0</span>
+              <span>5.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>5 分钟</span>
             </span>
 
         </div>
@@ -381,7 +405,269 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <p><img src="https://s2.loli.net/2022/05/13/sKY8uemo2Tbr7XC.png"></p>
+<h3 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h3><h4 id="进程通信的概念"><a href="#进程通信的概念" class="headerlink" title="进程通信的概念"></a>进程通信的概念</h4><p>进程是独立的资源分配单元，不同进程其资源是独立的，没有关联。但进程与进程时常需要进行数据交换，因此需要进程间通信IPC。</p>
+<p><strong>进程间通信的目的：</strong></p>
+<ul>
+<li>数据传输：一个进程需要将它的数据发送给另一进程</li>
+<li>通知事件：一个进程需要向另一个或一组进程发送消息，通知它们发生了某种事件（进程终止时要通知父进程）</li>
+<li>资源共享：多个进程之间共享同样的资源，为了做到这一点需要内核提供互斥和同步机制</li>
+<li>进程控制：有些进程希望完全控制另一个进程的执行（GDB），此时控制进程希望能够拦截另一个进程的所有陷入和异常，并能够及时知道它的状态改变</li>
+</ul>
+<p>在同主机间进程通信的方式有管道，信号，内存映射，共享内存等。不同主机间进程通信（即网络通信）主要使用socket。下面的小节对以上几种进程通信方式分别做介绍。</p>
+<h4 id="管道通信"><a href="#管道通信" class="headerlink" title="管道通信"></a>管道通信</h4><h5 id="管道通信的概念和原理"><a href="#管道通信的概念和原理" class="headerlink" title="管道通信的概念和原理"></a>管道通信的概念和原理</h5><p>管道是Unix系统进程通信的最古老形式，所有Unix系统都支持这种通信机制。下图为 ls | wc -l 的执行原理，其中ls和wc为两个进程，wc进程需要ls进程的数据。| 为管道符，ls向管道写数据，wc从管道读数据。</p>
+<p><img src="https://s2.loli.net/2022/05/13/yzpcPa9Bui5jhgL.png"></p>
+<ul>
+<li>管道其实是一个在内核内存中维护的缓冲器，这个缓冲器的存储能力是有限的，不同OS大小不一定相同。</li>
+<li>管道拥有文件的特性：读，写，管道两端有各自的文件描述符fd，匿名管道没有文件实体，有名管道存在文件实体，但不存储数据，可以按照操作文件的方式操作管道。</li>
+<li>一个管道是一个字节流，使用管道时不存在消息或者消息边界的概念，从管道读取数据的进程可以读取任意大小的数据块，而不管写入进程写入管道的数据量是多少。</li>
+<li>通过管道传递的数据是顺序的，从管道中读取出来的字节的顺序和他们被写入管道的顺序是完全相同的。</li>
+<li>管道的数据的传递方向是单向的，一端用于写入，一段用于读取，管道是半双工的。</li>
+<li>从管道读数据是一次性操作，数据一旦被独读走，就从管道中被抛弃，释放空间以便写入更多数据，在管道中无法使用lseek()随机访问数据。</li>
+<li>匿名管道只能在具有公共祖先的进程（父子进程，兄弟进程等）使用，因为fork出的进程共享文件描述符</li>
+</ul>
+<p><img src="https://s2.loli.net/2022/05/13/98w3lcyboSk6TYU.png"></p>
+<h5 id="管道读写的方式"><a href="#管道读写的方式" class="headerlink" title="管道读写的方式"></a>管道读写的方式</h5><p>在读管道时，若管道中有数据，read返回实际读到的字节数。若管道中无数据，如果写端全部关闭，read返回0，如果写端没有完全关闭，read阻塞等待。</p>
+<p>在写管道时，若管道读端全部关闭，进程异常终止。若管道读端没有完全关闭，若管道满，write阻塞，若管道没满，write写入数据，返回实际写入的字节数。</p>
+<h5 id="匿名管道"><a href="#匿名管道" class="headerlink" title="匿名管道"></a>匿名管道</h5><p>使用匿名管道（只能用于有亲缘关系的进程）：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">pipe</span><span class="params">(<span class="type">int</span> pipefd[<span class="number">2</span>])</span>;</span><br></pre></td></tr></table></figure>
+
+<p>查看管道缓冲区大小的命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ulimit -a</span><br></pre></td></tr></table></figure>
+
+<p>查看管道缓冲区大小的函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="title function_">fpathconf</span><span class="params">(<span class="type">int</span> fd, <span class="type">int</span> name)</span>;</span><br></pre></td></tr></table></figure>
+
+<h5 id="有名管道"><a href="#有名管道" class="headerlink" title="有名管道"></a>有名管道</h5><p>有名管道FIFO，提供了一个路径名与之关联，也就是说，有文件实体，其打开方式和文件一样。因此即使是不相关的两个进程也可以通过它来通信。</p>
+<p>一旦打开了FIFO就能在它上面使用与操作匿名管道和其他文件系统调用一样的函数（read，write，close），FIFO也有读端和写端，并且从管道中读取数据的顺序和写入的顺序一样。</p>
+<p>通过命令创建有名管道：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkfifo [fifo_name]</span><br></pre></td></tr></table></figure>
+
+<p>通过函数创建有名管道：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">mkfifo</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* pathname, <span class="type">mode_t</span> mode)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>一旦使用mkfifo创建了一个FIFO，就可以使用open打开它，常见的文件IO函数都可以用于FIFO。</li>
+<li>FIFO严格遵循先入先出，对管道及FIFO的读总是从开始处返回数据，对他们的写则是把数据添加到末尾，不支持lseek等文件随机定位函数。</li>
+<li>一个为只读而打开的管道进程会阻塞，直到另外一个进程为写数据打开管道。</li>
+<li>一个为只写打开管道的进程会阻塞，直到另外一个进程为读数据打开管道。</li>
+</ul>
+<h6 id="有名管道区别于匿名管道的地方"><a href="#有名管道区别于匿名管道的地方" class="headerlink" title="有名管道区别于匿名管道的地方"></a>有名管道区别于匿名管道的地方</h6><ul>
+<li>FIFO在文件系统中作为一个特殊文件存在，但FIFO中的内容却放在内存中。</li>
+<li>当使用FIFO的进程退出后，FIFO文件将继续保存在文件系统中以便以后使用。</li>
+<li>FIFO有名字，不相关的两个进程也可以通过打开有名管道通信。</li>
+</ul>
+<h4 id="内存映射"><a href="#内存映射" class="headerlink" title="内存映射"></a>内存映射</h4><h5 id="内存映射的概念和使用"><a href="#内存映射的概念和使用" class="headerlink" title="内存映射的概念和使用"></a>内存映射的概念和使用</h5><p>内存映射是将磁盘文件的数据映射到内存，用户通过修改内存就能修改磁盘文件。</p>
+<p>创建内存映射：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span>* <span class="title function_">mmap</span><span class="params">(<span class="type">void</span>* addr, <span class="type">size_t</span> length, <span class="type">int</span> prot, <span class="type">int</span> flags, <span class="type">int</span> fd, <span class="type">off_t</span> offset)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>释放内存映射：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">munmap</span><span class="params">(<span class="type">void</span> *addr, <span class="type">size_t</span> length)</span>;</span><br></pre></td></tr></table></figure>
+
+<h5 id="内存映射tips"><a href="#内存映射tips" class="headerlink" title="内存映射tips"></a>内存映射tips</h5><ul>
+<li>如果对mmap的返回值进行（ptr++），munmap是否能够成功？<ul>
+<li>答：可以ptr++，但是要先保存首地址否则unmap不正确。</li>
+</ul>
+</li>
+<li>如果open时O_RDONLY，mmap时prot参数指定PROT_READ | PROT_WRITE会如何？<ul>
+<li>答：会返回MAP_FAILED，prot的权限应当小于等于open时的权限。</li>
+</ul>
+</li>
+<li>文件偏移量为1000时会怎样？<ul>
+<li>答：偏移量必须为4K整数倍，因此会返回MAP_FAILED（4K为linux的页面大小）</li>
+</ul>
+</li>
+<li>mmap什么情况下会调用失败？<ul>
+<li>length&lt;&#x3D;0</li>
+<li>prot没指定读权限</li>
+<li>prot权限大于了open时指定的权限</li>
+<li>offset不是1024的整数倍</li>
+</ul>
+</li>
+<li>可以在open的时候O_CREAT一个新文件来创建映射区吗？<ul>
+<li>答：可以，但创建文件的大小为0则不行，因此要对新文件的大小进行扩展（lseek or truncate）</li>
+</ul>
+</li>
+<li>mmap后关闭文件描述符，对mmap映射有什么影响？<ul>
+<li>答：不会，映射区依然存在</li>
+</ul>
+</li>
+<li>对ptr越界操作会如何？<ul>
+<li>答：非法内存，发生段错误</li>
+</ul>
+</li>
+</ul>
+<h4 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h4><p>信号是事件发生时对进程的通知机制，也称为软件中断，它是软件层次上对中断机制的一种模拟，是一种异步通信方式。信号可以导致一个正在运行的进程被另一个正在运行的进程被另一个正在运行的异步进程中断，转而去处理某一个突发事件。发往进程的诸多信号通常源于内核。</p>
+<h5 id="发送信号的情况"><a href="#发送信号的情况" class="headerlink" title="发送信号的情况"></a>发送信号的情况</h5><ul>
+<li>对于前台进程，用户可以通过输入特殊的终端字符来对进程发送信号。例如ctrl+C。</li>
+<li>硬件发生异常，即硬件检测到一个错误条件并且通知内核，内核随即发送相应信号给进程。</li>
+<li>系统状态变化，例如alarm定时器到期将引起SIGALRM信号。</li>
+<li>运行kill命令或者调用kill函数。</li>
+</ul>
+<h5 id="使用信号的目的："><a href="#使用信号的目的：" class="headerlink" title="使用信号的目的："></a>使用信号的目的：</h5><ul>
+<li>让进程知道已经发生了一个特定的事件。</li>
+<li>强迫进程执行它代码中的信号处理程序。</li>
+</ul>
+<h5 id="信号的默认处理动作"><a href="#信号的默认处理动作" class="headerlink" title="信号的默认处理动作"></a>信号的默认处理动作</h5><ul>
+<li>Term 终止进程</li>
+<li>Ign 当前进程忽略掉这个信号</li>
+<li>Core 终止进程，并生成一个Core文件</li>
+<li>Stop 暂停当前进程</li>
+<li>Cont 继续执行被暂停的进程</li>
+</ul>
+<p>SIGKILL和SIGSTOP不能被捕捉，阻塞或者忽略，只能执行默认动作。</p>
+<h5 id="信号相关函数"><a href="#信号相关函数" class="headerlink" title="信号相关函数"></a>信号相关函数</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">kill</span><span class="params">(<span class="type">pid_t</span> pid, <span class="type">int</span> sig)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>功能：向任何进程pid发送任何sig信号</li>
+<li>参数：<ul>
+<li>pid：<ul>
+<li>pid &gt; 0：发送给指定进程</li>
+<li>pid &#x3D;&#x3D; 0：发送给当前进程</li>
+<li>pid &#x3D;&#x3D; -1：发送给每一个有权限接受这个信号的进程</li>
+<li>pid &lt; -1：向pid的进程组发送信号</li>
+</ul>
+</li>
+<li>sig：要发送的信号 sig&#x3D;&#x3D;0不发送任何信号</li>
+</ul>
+</li>
+<li>返回值：0成功，非0失败</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">raise</span><span class="params">(<span class="type">int</span> sig)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>功能：给当前进程发送信号</li>
+<li>参数：<ul>
+<li>sig：要发送的信号</li>
+</ul>
+</li>
+<li>返回值：0成功，非0失败</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">abort</span><span class="params">(<span class="type">void</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>功能：给当前进程发送SIGABRT信号</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">int</span> <span class="title function_">alarm</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> seconds)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>功能：设置定时器。函数调用开始倒计时，当倒计时为0的时候函数会给当前进程发送一个SIGALARM信号。</li>
+<li>参数：<ul>
+<li>seconds：倒计时时长，参数为0则定时器无效。</li>
+</ul>
+</li>
+<li>返回值：之前有定时器，则返回上个定时器剩余时间，之前没有定时器，则返回0。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">setitimer</span><span class="params">(<span class="type">int</span> which, <span class="type">const</span> <span class="keyword">struct</span> itimerval *new_value, <span class="keyword">struct</span> itimerval *old_value)</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定时器结构体</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">itimerval</span>&#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">timeval</span> <span class="title">it_interval</span>;</span> <span class="comment">// 间隔时间</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">timeval</span> <span class="title">it_value</span>;</span> <span class="comment">// 延迟多久时间执行定时器</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 时间结构体</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">timeval</span>&#123;</span></span><br><span class="line">    <span class="type">time_t</span> tv_sec; <span class="comment">// 秒</span></span><br><span class="line">    <span class="type">suseconds_t</span> tv_usec; <span class="comment">// 微秒</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>功能：设置定时器，可以替代alarm函数，精度更高（us），可以实现周期性定时。</li>
+<li>参数：<ul>
+<li>which：指定选用哪种类型的时间<ul>
+<li>ITIMER_REAL：真实时间，发送SIGALARM。</li>
+<li>ITIMER_VIRTUAL：用户时间，发送SIGVTALRM。</li>
+<li>ITIMER_PROF：该进程在用户态和内核态下的时间计算，发送SIGPROF。</li>
+</ul>
+</li>
+<li>new_value：设置定时器属性。</li>
+<li>old_value：记录上一次定时的时间参数，一般指定nullptr。</li>
+</ul>
+</li>
+<li>返回值：成功0，失败-1</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">sighandler_t</span> <span class="title function_">signal</span><span class="params">(<span class="type">int</span> signum, <span class="type">sighandler_t</span> handler)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>功能：设置某个信号的捕捉行为</li>
+<li>参数：<ul>
+<li>signum：要捕捉的信号值</li>
+<li>handler：信号处理方式<ul>
+<li>SIG_IGN：忽略信号</li>
+<li>SIG_DFL：使用信号默认行为</li>
+<li>回调函数：用自定义函数处理，由内核调用，程序员只负责编写。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>返回值：<ul>
+<li>成功：返回上一次注册的信号处理函数的地址，第一次调用返回nullptr。</li>
+<li>失败：返回 SIG_ERR，设置错误号。</li>
+</ul>
+</li>
+<li>ps：SIGKILL 和 SIGSTOP不能被捕捉或忽略</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sigaction</span><span class="params">(<span class="type">int</span> signum, <span class="type">const</span> <span class="keyword">struct</span> sigaction *act, <span class="keyword">struct</span> sigaction *oldact)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>功能：检查或者改变信号的处理，信号捕捉</li>
+<li>参数：<ul>
+<li>signum：要捕捉的信号值</li>
+<li>act：捕捉到信号后的处理动作（回调函数）</li>
+<li>oldact：上一次对信号捕捉的相关设置，一般为nullptr。</li>
+</ul>
+</li>
+<li>返回值：成功0，失败-1。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sigaction</span> &#123;</span></span><br><span class="line">    <span class="type">void</span> (*sa_handler)(<span class="type">int</span>);</span><br><span class="line">    <span class="type">void</span> (*sa_sigaction)(<span class="type">int</span>, <span class="type">siginfo_t</span> *, <span class="type">void</span> *);</span><br><span class="line">    <span class="type">sigset_t</span> sa_mask;</span><br><span class="line">    <span class="type">int</span> sa_flags;</span><br><span class="line">    <span class="type">void</span> (*sa_restorer)(<span class="type">void</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>sa_handler：此参数和signal()的参数handler相同，代表新的信号处理函数。</li>
+<li>sa_mask：用来设置在处理该信号时暂时将sa_mask 指定的信号集搁置。</li>
+<li>sa_flags：用来设置信号处理的其他相关操作，有以下几个可选值<ul>
+<li>SA_RESETHAND：当调用信号处理函数时，将信号的处理函数重置为缺省值SIG_DFL。</li>
+<li>SA_RESTART：如果信号中断了进程的某个系统调用，则系统自动启动该系统调用。</li>
+<li>SA_NODEFER ：一般情况下， 当信号处理函数运行时，内核将阻塞该给定信号。但是如果设置了 SA_NODEFER标记， 那么在该信号处理函数运行时，内核将不会阻塞该信号。</li>
+</ul>
+</li>
+</ul>
+<h5 id="信号集"><a href="#信号集" class="headerlink" title="信号集"></a>信号集</h5><p>多个信号可使用一个称为信号集的数据结构表示，在PCB中有两个重要的信号集：阻塞信号集，未决信号集。这两个信号集都是内核使用位图机制来实现的。但操作系统不允许我们直接对这两个信号集进行位操作，而需要自定义另一个集合，借助信号集操作函数来对PCB中这两个信号集进行修改。</p>
+<p>信号的未决是一种状态：信号产生到信号被处理前的这段时间。信号的阻塞是一个开关动作，指的是信号被处理，但是不阻止信号产生。</p>
+<p>信号的阻塞是让系统暂时保留信号待以后发送，由于另外有办法让系统忽略信号，所以一般情况下信号的阻塞只是暂时的，只是为了防止信号打断敏感操作。</p>
+<p><img src="https://s2.loli.net/2022/05/14/KGsjhSk4FltZx9r.png"></p>
+<h5 id="信号集相关函数"><a href="#信号集相关函数" class="headerlink" title="信号集相关函数"></a>信号集相关函数</h5><p>清空信号集数据，将所有标志位清0：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sigemptyset</span><span class="params">(<span class="type">sigset_t</span> *<span class="built_in">set</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>将信号集所有位置1：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sigfillset</span><span class="params">(<span class="type">sigset_t</span> *<span class="built_in">set</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>添加阻塞位，将信号值signum对应的位置1，表示阻塞该信号：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sigaddset</span><span class="params">(<span class="type">sigset_t</span> *<span class="built_in">set</span>, <span class="type">int</span> signum)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>删除阻塞位，将信号值signum对应的位置0，表示不阻塞该信号：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sigdelset</span><span class="params">(<span class="type">sigset_t</span> *<span class="built_in">set</span>, <span class="type">int</span> signum)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>判断某个信号是否为1（是否阻塞）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sigismember</span><span class="params">(<span class="type">const</span> <span class="type">sigset_t</span> *<span class="built_in">set</span>, <span class="type">int</span> signum)</span>; <span class="comment">//返回1阻塞，返回0不阻塞</span></span><br></pre></td></tr></table></figure>
+
+<p>设置阻塞信号集：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sigprocmask</span><span class="params">(<span class="type">int</span> how, <span class="type">const</span> <span class="type">sigset_t</span> *<span class="built_in">set</span>, <span class="type">sigset_t</span> *oldset)</span>;</span><br><span class="line"><span class="comment">// 其中how参数有如下可选项</span></span><br><span class="line"><span class="comment">// SIG_BLOCK：将用户设置的阻塞信号集添加到内核，内核原来的数据不变</span></span><br><span class="line"><span class="comment">// SIG_UNBLOCK：根据用户设置的数据，对内核中的信号集接触阻塞</span></span><br><span class="line"><span class="comment">// SIG_SETMASK：覆盖内核的阻塞信号集</span></span><br></pre></td></tr></table></figure>
+
+<p>获取内核中的未决信号集：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sigpending</span><span class="params">(<span class="type">sigset_t</span> *<span class="built_in">set</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<h5 id="内核实现信号捕捉的流程"><a href="#内核实现信号捕捉的流程" class="headerlink" title="内核实现信号捕捉的流程"></a>内核实现信号捕捉的流程</h5><ol>
+<li>主程序因为某条指令因为中断，异常，或系统调用进入内核。</li>
+<li>内核处理完异常准备会用户态前先处理当前进程中可以递送的信号：do_signal()</li>
+<li>如果信号处理动作为用户自定义的信号处理函数，则回到用户态执行信号处理函数。</li>
+<li>信号处理函数返回时执行特殊的系统调用：sys_sigreturn()</li>
+<li>返回用户态从主程序中上次被中断的地方继续执行</li>
+<li><strong>sigaction执行信号处理时会有临时阻塞信号集，信号处理完毕后恢复为内核区信号集</strong></li>
+<li><strong>当执行信号处理程序时，该信号会被自动阻塞（系统行为）</strong></li>
+<li><strong>信号被阻塞时，新来的信号被直接丢弃，不支持排队，也不支持记录信号个数（因为实现机制是位图机制）</strong></li>
+</ol>
+<p><img src="https://s2.loli.net/2022/05/14/1Ay8GbHe4st3lPw.png"></p>
+<h5 id="SIGCHLD信号"><a href="#SIGCHLD信号" class="headerlink" title="SIGCHLD信号"></a>SIGCHLD信号</h5><p><strong>产生条件：</strong></p>
+<ul>
+<li>子进程终止时。</li>
+<li>子进程接受到SIGSTOP信号停止时。</li>
+<li>子进程处在停止态，接受到SIGCONT后唤醒时。</li>
+<li>以上三种条件都会给父进程发送SIGCHILD信号，父进程默认忽略该信号。</li>
+</ul>
+
       
     </div>
 
@@ -1825,7 +2111,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1866,12 +2152,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">9k</span>
+    <span title="站点总字数">15k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">8 分钟</span>
+    <span title="站点阅读时长">13 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
