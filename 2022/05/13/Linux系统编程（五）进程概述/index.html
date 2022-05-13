@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="进程的概念和相关函数进程概述进程是执行中的程序的实例，从操作系统内核的视角来看，进程是操作系统分配资源的基本单位。Linux中使用进程控制块PCB来描述一个进程。当程序被加载到内存中开始执行时，操作系统会为该进程分配一个PCB，记录该进程相关的信息。 进程控制块的数据结构：task_structtask_struct是Linux内核的一种数据结构，它被装载到RAM中担任进程控制块的作用，每个进程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux系统编程（五）进程概述">
+<meta property="og:url" content="http://example.com/2022/05/13/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%94%EF%BC%89%E8%BF%9B%E7%A8%8B%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="未来道具研究所">
+<meta property="og:description" content="进程的概念和相关函数进程概述进程是执行中的程序的实例，从操作系统内核的视角来看，进程是操作系统分配资源的基本单位。Linux中使用进程控制块PCB来描述一个进程。当程序被加载到内存中开始执行时，操作系统会为该进程分配一个PCB，记录该进程相关的信息。 进程控制块的数据结构：task_structtask_struct是Linux内核的一种数据结构，它被装载到RAM中担任进程控制块的作用，每个进程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/05/13/Yi3QhLzmrWHMeol.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/13/evDzKl1nPgGmZYd.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/13/FSXxmCjcZLU5npt.png">
+<meta property="article:published_time" content="2022-05-13T05:05:57.000Z">
+<meta property="article:modified_time" content="2022-05-13T08:16:44.741Z">
+<meta property="article:author" content="Lily">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="进程">
+<meta property="article:tag" content="操作系统">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/05/13/Yi3QhLzmrWHMeol.png">
+
+<link rel="canonical" href="http://example.com/2022/05/13/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%94%EF%BC%89%E8%BF%9B%E7%A8%8B%E6%A6%82%E8%BF%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Linux系统编程（五）进程概述 | 未来道具研究所</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <script src="/live2d-widget/autoload.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">未来道具研究所</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/13/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%94%EF%BC%89%E8%BF%9B%E7%A8%8B%E6%A6%82%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Lily">
+      <meta itemprop="description" content="无论身处哪条世界线上的哪个时间点，我都喜欢着你">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="未来道具研究所">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux系统编程（五）进程概述
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-13 13:05:57 / 修改时间：16:16:44" itemprop="dateCreated datePublished" datetime="2022-05-13T13:05:57+08:00">2022-05-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">Linux服务器开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%80%E5%8F%91/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">Linux系统编程</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/05/13/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%94%EF%BC%89%E8%BF%9B%E7%A8%8B%E6%A6%82%E8%BF%B0/" class="post-meta-item leancloud_visitors" data-flag-title="Linux系统编程（五）进程概述" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/05/13/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%94%EF%BC%89%E8%BF%9B%E7%A8%8B%E6%A6%82%E8%BF%B0/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/05/13/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%94%EF%BC%89%E8%BF%9B%E7%A8%8B%E6%A6%82%E8%BF%B0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://s2.loli.net/2022/05/13/Yi3QhLzmrWHMeol.png"></p>
+<h3 id="进程的概念和相关函数"><a href="#进程的概念和相关函数" class="headerlink" title="进程的概念和相关函数"></a>进程的概念和相关函数</h3><h4 id="进程概述"><a href="#进程概述" class="headerlink" title="进程概述"></a>进程概述</h4><p>进程是执行中的程序的实例，从操作系统内核的视角来看，进程是操作系统分配资源的基本单位。Linux中使用进程控制块PCB来描述一个进程。当程序被加载到内存中开始执行时，操作系统会为该进程分配一个PCB，记录该进程相关的信息。</p>
+<h5 id="进程控制块的数据结构：task-struct"><a href="#进程控制块的数据结构：task-struct" class="headerlink" title="进程控制块的数据结构：task_struct"></a>进程控制块的数据结构：task_struct</h5><p>task_struct是Linux内核的一种数据结构，它被装载到RAM中担任进程控制块的作用，每个进程都把它的信息装载到task_struct结构中。task_struct结构中包含以下信息：</p>
+<ul>
+<li><p>标识符：与进程相关的唯一标识符，用来区别其他进程</p>
+</li>
+<li><p>状态：进程会有不同的状态，如运行，停止等等</p>
+</li>
+<li><p>优先级：相对于其他进程的优先顺序</p>
+</li>
+<li><p>程序计数器：程序中即将执行的下一条指令的地址</p>
+</li>
+<li><p>内存指针：包括程序代码和进程相关数据的是很</p>
+</li>
+<li><p>上下文信息：进程执行时CPU的寄存器中的数据</p>
+</li>
+<li><p>IO状态信息： 包括显示的I&#x2F;O请求，分配给进程的I&#x2F;O设备和正在被进程使用的文件列表。</p>
+</li>
+<li><p>记账信息：可能包括处理器时间总和，使用的时钟总数，时间限制，记账号等。</p>
+</li>
+</ul>
+<h5 id="进程状态切换模型"><a href="#进程状态切换模型" class="headerlink" title="进程状态切换模型"></a>进程状态切换模型</h5><p>进程状态反应进程执行过程中的变化，这些状态随着进程的执行和外界条件的变化而转换。进程的状态主要有五种：新建态，就绪态，运行态，阻塞态，终止态。</p>
+<ul>
+<li>新建态：进程刚被创建时的状态，此时尚未进入就绪队列。</li>
+<li>终止态：进程完成任务到达正常结束点，或出现无法克服的错误而异常终止，或被操作系统以及其他拥有终止权的进程终止时所处的状态。进程进入终止态后不再执行，但依然保留在操作系统中等待善后，直到进程被其他进程回收必要的资源后，操作系统删除该进程。</li>
+<li>运行态：进程占有处理器正在运行。</li>
+<li>就绪态：进程具备运行所需的全部资源，等待系统分配处理器。</li>
+<li>阻塞态：进程缺少运行所需的资源，等待某个事件的完成而无法继续执行。</li>
+</ul>
+<p>进程的状态转换关系可以用下图来表述：</p>
+<p><img src="https://s2.loli.net/2022/05/13/evDzKl1nPgGmZYd.png"></p>
+<h5 id="进程相关的命令"><a href="#进程相关的命令" class="headerlink" title="进程相关的命令"></a>进程相关的命令</h5><h6 id="ps命令查看进程静态信息"><a href="#ps命令查看进程静态信息" class="headerlink" title="ps命令查看进程静态信息"></a>ps命令查看进程静态信息</h6><ul>
+<li>a：显示终端上所有进程</li>
+<li>u：显示进程详细信息</li>
+<li>x：显示没有控制终端的进程</li>
+<li>j：列出与作业控制相关的信息</li>
+</ul>
+<h6 id="top命令查看进程动态信息"><a href="#top命令查看进程动态信息" class="headerlink" title="top命令查看进程动态信息"></a>top命令查看进程动态信息</h6><ul>
+<li><p>M：根据内存使用量排序</p>
+</li>
+<li><p>P：根据CPU占有率排序</p>
+</li>
+<li><p>T：根据进程运行时间长短排序</p>
+</li>
+<li><p>U：根据用户名筛选进程</p>
+</li>
+<li><p>K：输入指定PID杀死进程</p>
+</li>
+</ul>
+<h6 id="kill命令杀死进程"><a href="#kill命令杀死进程" class="headerlink" title="kill命令杀死进程"></a>kill命令杀死进程</h6><p>杀死进程</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kill pid</span><br></pre></td></tr></table></figure>
+
+<p>强制杀死进程</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kill -KILL pid</span><br></pre></td></tr></table></figure>
+
+<p>发送信号</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kill -[signal_val] pid</span><br></pre></td></tr></table></figure>
+
+<p>彻底杀死进程</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kill -9 pid</span><br></pre></td></tr></table></figure>
+
+<p>显示所有可用的信号</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kill -l</span><br></pre></td></tr></table></figure>
+
+<h4 id="父进程与子进程"><a href="#父进程与子进程" class="headerlink" title="父进程与子进程"></a>父进程与子进程</h4><h5 id="fork函数创建进程"><a href="#fork函数创建进程" class="headerlink" title="fork函数创建进程"></a>fork函数创建进程</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">pid_t</span> <span class="title function_">fork</span><span class="params">(<span class="type">void</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>fork函数的作用是创建一个子进程，该函数会返回两次，一次在父进程中，返回创建的子进程的ID，另一次在子进程中，返回0，创建失败返回-1。因此，我们可以通过fork的返回值来判断当前进程是父进程还是子进程</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">pid_t</span> pid = fork();</span><br><span class="line"><span class="keyword">if</span>(pid == <span class="number">-1</span>)&#123;</span><br><span class="line">    <span class="comment">// 创建失败</span></span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(pid == <span class="number">0</span>)&#123;</span><br><span class="line">    <span class="comment">// 子进程逻辑</span></span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="comment">// 父进程逻辑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="父子进程虚拟地址空间情况"><a href="#父子进程虚拟地址空间情况" class="headerlink" title="父子进程虚拟地址空间情况"></a>父子进程虚拟地址空间情况</h5><p>fork函数的实现并非单纯的完全拷贝，而是采用写时拷贝的方法。一开始子进程和父进程是共享相同的物理地址空间的，读数据时也是共享，当发生写操作后，发生实际的拷贝操作。（读时共享，写时拷贝）这样可以减少内存复制的开销。</p>
+<p><img src="https://s2.loli.net/2022/05/13/FSXxmCjcZLU5npt.png"></p>
+<h5 id="父子进程的异同点"><a href="#父子进程的异同点" class="headerlink" title="父子进程的异同点"></a>父子进程的异同点</h5><h6 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h6><p>父进程从头开始执行，子进程从fork返回后开始执行。</p>
+<p>fork函数在父进程返回子进程pid，在子进程返回0。</p>
+<p>通过fork函数返回值不同区分父子进程。</p>
+<p>父进程和子进程的PCB中部分信息不同。</p>
+<h6 id="共同点："><a href="#共同点：" class="headerlink" title="共同点："></a>共同点：</h6><p>子进程刚被创建，还没有执行任何写操作时，用户区数据和文件描述符表示一样的。</p>
+<p>进程中的变量在没执行写操作时是共享的，写操作时复制。（读时共享，写时拷贝）</p>
+<h5 id="孤儿进程和僵尸进程"><a href="#孤儿进程和僵尸进程" class="headerlink" title="孤儿进程和僵尸进程"></a>孤儿进程和僵尸进程</h5><h6 id="孤儿进程："><a href="#孤儿进程：" class="headerlink" title="孤儿进程："></a>孤儿进程：</h6><p>父进程运行结束但是子进程仍在运行，这样的子进程为孤儿进程，每当出现孤儿进程时，内核把该孤儿进程的父进程设置为init，而init会循环的wait()它的已经退出的子进程，这样一个孤儿进程结束生命周期时，init进程就会处理其善后工作，因此孤儿进程没有什么危害。</p>
+<h6 id="僵尸进程："><a href="#僵尸进程：" class="headerlink" title="僵尸进程："></a>僵尸进程：</h6><p>每个进程接受后都会释放自己地址空间中的用户去数据，内核区的PCB没办法自己释放，需要父进程释放。</p>
+<p>进程终止时，父进程尚未回收，子进程残留资源（PCB）存放在内核区中，成为僵尸进程。</p>
+<p>僵尸进程不能被kill -9杀死，这样会导致，如果父进程不调用wait()或者waitpid()的话，那么保留的那段信息不回被释放，其进程号会一直被占用，但是系统所能使用的进程号是有限的，如果僵尸进程大量产生，将可能因为没有可用的进程号而导致系统无法产生新的进程。这就是僵尸进程的危害，应当避免。</p>
+<h4 id="进程回收"><a href="#进程回收" class="headerlink" title="进程回收"></a>进程回收</h4><h5 id="wait函数与waitpid函数"><a href="#wait函数与waitpid函数" class="headerlink" title="wait函数与waitpid函数"></a>wait函数与waitpid函数</h5><p>每个进程退出时，内核释放该进程的所有资源，包括打开的文件，占用的内存等，但是仍然为其保留一定懂得信息，这些信息主要指进程控制快PCB的信息。父进程可以通过调用wait或者waitpid函数得到它的退出状态同时彻底清除这个进程。这两个函数原型为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">wait</span><span class="params">(<span class="type">int</span> *status)</span>;</span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">waitpid</span> <span class="params">(<span class="type">pid_t</span> pid, <span class="type">int</span> *status, <span class="type">int</span> options)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>wait()和waitpid()函数的功能一样，区别在于wait()函数会阻塞，waitpid()可以设置不阻塞，waitpid()还可以指定等待哪个子进程结束。一次wait或waitpid调用只能清理一个子进程，清理多个子进程应当使用循环。</p>
+<h5 id="进程退出相关宏函数"><a href="#进程退出相关宏函数" class="headerlink" title="进程退出相关宏函数"></a>进程退出相关宏函数</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">WIFEXITED(status); <span class="comment">// 非0则进程正常退出</span></span><br><span class="line">WEXITSTATUS(status); <span class="comment">// 为真则获取进程退出的状态</span></span><br><span class="line">WIFSIGNALED(status); <span class="comment">// 非0则进程异常终止</span></span><br><span class="line">WTERMSIG(status); <span class="comment">// 为真则获取使进程终止的信号编号</span></span><br><span class="line">WIFSTOPPED(status); <span class="comment">// 非0则进程处于暂停状态</span></span><br><span class="line">WSTOPSIG(status); <span class="comment">// 为真则获取使进程暂停的信号编号</span></span><br><span class="line">WIFCONTINUED(status); <span class="comment">// 非0则进程暂停后已经继续运行</span></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+    <div>
+         
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:24px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+        
+    </div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/%E8%BF%9B%E7%A8%8B/" rel="tag"># 进程</a>
+              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"># 操作系统</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/13/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E5%9B%9B%EF%BC%89%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" rel="prev" title="Linux系统编程（四）文件操作">
+      <i class="fa fa-chevron-left"></i> Linux系统编程（四）文件操作
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/13/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E5%85%AD%EF%BC%89%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" rel="next" title="Linux系统编程（六）进程间通信">
+      Linux系统编程（六）进程间通信 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">进程的概念和相关函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">进程概述</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E6%8E%A7%E5%88%B6%E5%9D%97%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%9Atask-struct"><span class="nav-number">1.1.1.</span> <span class="nav-text">进程控制块的数据结构：task_struct</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81%E5%88%87%E6%8D%A2%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.2.</span> <span class="nav-text">进程状态切换模型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="nav-number">1.1.3.</span> <span class="nav-text">进程相关的命令</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#ps%E5%91%BD%E4%BB%A4%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E9%9D%99%E6%80%81%E4%BF%A1%E6%81%AF"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">ps命令查看进程静态信息</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#top%E5%91%BD%E4%BB%A4%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E5%8A%A8%E6%80%81%E4%BF%A1%E6%81%AF"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">top命令查看进程动态信息</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#kill%E5%91%BD%E4%BB%A4%E6%9D%80%E6%AD%BB%E8%BF%9B%E7%A8%8B"><span class="nav-number">1.1.3.3.</span> <span class="nav-text">kill命令杀死进程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%88%B6%E8%BF%9B%E7%A8%8B%E4%B8%8E%E5%AD%90%E8%BF%9B%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">父进程与子进程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#fork%E5%87%BD%E6%95%B0%E5%88%9B%E5%BB%BA%E8%BF%9B%E7%A8%8B"><span class="nav-number">1.2.1.</span> <span class="nav-text">fork函数创建进程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%88%B6%E5%AD%90%E8%BF%9B%E7%A8%8B%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E6%83%85%E5%86%B5"><span class="nav-number">1.2.2.</span> <span class="nav-text">父子进程虚拟地址空间情况</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%88%B6%E5%AD%90%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%BC%82%E5%90%8C%E7%82%B9"><span class="nav-number">1.2.3.</span> <span class="nav-text">父子进程的异同点</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%8C%BA%E5%88%AB%EF%BC%9A"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">区别：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%85%B1%E5%90%8C%E7%82%B9%EF%BC%9A"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">共同点：</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AD%A4%E5%84%BF%E8%BF%9B%E7%A8%8B%E5%92%8C%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B"><span class="nav-number">1.2.4.</span> <span class="nav-text">孤儿进程和僵尸进程</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%AD%A4%E5%84%BF%E8%BF%9B%E7%A8%8B%EF%BC%9A"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">孤儿进程：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B%EF%BC%9A"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">僵尸进程：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E5%9B%9E%E6%94%B6"><span class="nav-number">1.3.</span> <span class="nav-text">进程回收</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#wait%E5%87%BD%E6%95%B0%E4%B8%8Ewaitpid%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.1.</span> <span class="nav-text">wait函数与waitpid函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%80%80%E5%87%BA%E7%9B%B8%E5%85%B3%E5%AE%8F%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.2.</span> <span class="nav-text">进程退出相关宏函数</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lily"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Lily</p>
+  <div class="site-description" itemprop="description">无论身处哪条世界线上的哪个时间点，我都喜欢着你</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="mailto:1733015942@qq.com" title="E-Mail → mailto:1733015942@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lily</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">9k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'dzW8av4izzlXxMIC9eP17cJR-MdYXbMMI',
+      appKey     : '2eAQdkKoQ9JnOvBg2CxSv1F1',
+      placeholder: "和谐冲浪，人人有责",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : 'https://dzw8av4i.api.lncldglobal.com'
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
