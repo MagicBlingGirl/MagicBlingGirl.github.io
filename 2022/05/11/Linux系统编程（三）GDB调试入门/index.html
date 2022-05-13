@@ -22,22 +22,22 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="新建文章使用命令新建文章 1hexo new [layout] &lt;title&gt;  new：文章创建命令 layout：文章布局，默认post，可以不填 title：文章标题兼文件名 文件存储路径为：source&#x2F;_posts 123$ hexo new &quot;如何在hexo上创建一篇文章&quot;INFO  Validating configINFO  Created">
+  <meta name="description" content="GDB调试器入门GDB简介GDB全称 “GNU symbolic debugger”，是Linux下常用的程序调试器，使用GDB调试器可以让程序按我们自定义的要求执行，例如在指定代码处暂停运行，查看当前的变量信息，单步调试，断点调试，设置变量等。 通过以下命令利用包管理器安装GDB调试器。 1$ yum -y install gdb  要使用GDB调试程序，需要在编译时添加调试选项，生成可调试的可">
 <meta property="og:type" content="article">
-<meta property="og:title" content="如何在hexo上创建一篇文章">
-<meta property="og:url" content="http://example.com/2022/05/11/%E5%A6%82%E4%BD%95%E5%9C%A8hexo%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/index.html">
+<meta property="og:title" content="Linux系统编程（三）GDB调试入门">
+<meta property="og:url" content="http://example.com/2022/05/11/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89GDB%E8%B0%83%E8%AF%95%E5%85%A5%E9%97%A8/index.html">
 <meta property="og:site_name" content="未来道具研究所">
-<meta property="og:description" content="新建文章使用命令新建文章 1hexo new [layout] &lt;title&gt;  new：文章创建命令 layout：文章布局，默认post，可以不填 title：文章标题兼文件名 文件存储路径为：source&#x2F;_posts 123$ hexo new &quot;如何在hexo上创建一篇文章&quot;INFO  Validating configINFO  Created">
+<meta property="og:description" content="GDB调试器入门GDB简介GDB全称 “GNU symbolic debugger”，是Linux下常用的程序调试器，使用GDB调试器可以让程序按我们自定义的要求执行，例如在指定代码处暂停运行，查看当前的变量信息，单步调试，断点调试，设置变量等。 通过以下命令利用包管理器安装GDB调试器。 1$ yum -y install gdb  要使用GDB调试程序，需要在编译时添加调试选项，生成可调试的可">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2022/05/11/%E5%A6%82%E4%BD%95%E5%9C%A8hexo%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/1.png">
-<meta property="article:published_time" content="2022-05-10T16:27:31.000Z">
-<meta property="article:modified_time" content="2022-05-10T16:59:07.522Z">
+<meta property="article:published_time" content="2022-05-11T12:16:50.000Z">
+<meta property="article:modified_time" content="2022-05-11T12:57:54.608Z">
 <meta property="article:author" content="Lily">
-<meta property="article:tag" content="博客使用">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="GDB">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2022/05/11/%E5%A6%82%E4%BD%95%E5%9C%A8hexo%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/1.png">
 
-<link rel="canonical" href="http://example.com/2022/05/11/%E5%A6%82%E4%BD%95%E5%9C%A8hexo%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/">
+<link rel="canonical" href="http://example.com/2022/05/11/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89GDB%E8%B0%83%E8%AF%95%E5%85%A5%E9%97%A8/">
 
 
 <script id="page-configurations">
@@ -50,7 +50,7 @@
   };
 </script>
 
-  <title>如何在hexo上创建一篇文章 | 未来道具研究所</title>
+  <title>Linux系统编程（三）GDB调试入门 | 未来道具研究所</title>
   
 
 
@@ -199,7 +199,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/11/%E5%A6%82%E4%BD%95%E5%9C%A8hexo%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/11/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89GDB%E8%B0%83%E8%AF%95%E5%85%A5%E9%97%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -212,7 +212,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          如何在hexo上创建一篇文章
+          Linux系统编程（三）GDB调试入门
         </h1>
 
         <div class="post-meta">
@@ -224,7 +224,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-05-11 00:27:31 / 修改时间：00:59:07" itemprop="dateCreated datePublished" datetime="2022-05-11T00:27:31+08:00">2022-05-11</time>
+              <time title="创建时间：2022-05-11 20:16:50 / 修改时间：20:57:54" itemprop="dateCreated datePublished" datetime="2022-05-11T20:16:50+08:00">2022-05-11</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -232,12 +232,20 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%8D%9A%E5%AE%A2/" itemprop="url" rel="index"><span itemprop="name">博客</span></a>
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">Linux服务器开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%80%E5%8F%91/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">Linux系统编程</span></a>
                 </span>
             </span>
 
           
-            <span id="/2022/05/11/%E5%A6%82%E4%BD%95%E5%9C%A8hexo%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/" class="post-meta-item leancloud_visitors" data-flag-title="如何在hexo上创建一篇文章" title="阅读次数">
+            <span id="/2022/05/11/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89GDB%E8%B0%83%E8%AF%95%E5%85%A5%E9%97%A8/" class="post-meta-item leancloud_visitors" data-flag-title="Linux系统编程（三）GDB调试入门" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -252,8 +260,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2022/05/11/%E5%A6%82%E4%BD%95%E5%9C%A8hexo%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2022/05/11/%E5%A6%82%E4%BD%95%E5%9C%A8hexo%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/" itemprop="commentCount"></span>
+    <a title="valine" href="/2022/05/11/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89GDB%E8%B0%83%E8%AF%95%E5%85%A5%E9%97%A8/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/05/11/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89GDB%E8%B0%83%E8%AF%95%E5%85%A5%E9%97%A8/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -263,7 +271,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>484</span>
+              <span>713</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -282,69 +290,93 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h4 id="新建文章"><a href="#新建文章" class="headerlink" title="新建文章"></a>新建文章</h4><p>使用命令新建文章</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new [layout] &lt;title&gt;</span><br></pre></td></tr></table></figure>
+        <h3 id="GDB调试器入门"><a href="#GDB调试器入门" class="headerlink" title="GDB调试器入门"></a>GDB调试器入门</h3><h4 id="GDB简介"><a href="#GDB简介" class="headerlink" title="GDB简介"></a>GDB简介</h4><p>GDB全称 “GNU symbolic debugger”，是Linux下常用的程序调试器，使用GDB调试器可以让程序按我们自定义的要求执行，例如在指定代码处暂停运行，查看当前的变量信息，单步调试，断点调试，设置变量等。</p>
+<p>通过以下命令利用包管理器安装GDB调试器。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">yum -y install gdb</span></span><br></pre></td></tr></table></figure>
 
-<p>new：文章创建命令</p>
-<p>layout：文章布局，默认post，可以不填</p>
-<p>title：文章标题兼文件名</p>
-<p>文件存储路径为：source&#x2F;_posts</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new &quot;如何在hexo上创建一篇文章&quot;</span><br><span class="line">INFO  Validating config</span><br><span class="line">INFO  Created: ~\Desktop\Programing\notes\MyBlog\source\_posts\如何在hexo上创建一篇文章.md</span><br></pre></td></tr></table></figure>
+<p>要使用GDB调试程序，需要在编译时添加调试选项，生成可调试的可执行文件，之后才可以进行GDB调试。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ main.cpp -o app -g</span><br></pre></td></tr></table></figure>
 
-<p>如上使用命令创建一篇名为“如何在hexo上创建一篇文章”的文章</p>
-<h4 id="Front-matter设置"><a href="#Front-matter设置" class="headerlink" title="Front-matter设置"></a>Front-matter设置</h4><p>Front-matter是指定文章属性变量的一块区域</p>
-<p><img src="/2022/05/11/%E5%A6%82%E4%BD%95%E5%9C%A8hexo%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/1.png" alt="1"></p>
-<p>下表为一些预定义的参数</p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>描述</th>
-<th>默认值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>layout</td>
-<td>布局</td>
-<td>无</td>
-</tr>
-<tr>
-<td>title</td>
-<td>标题</td>
-<td>无</td>
-</tr>
-<tr>
-<td>date</td>
-<td>建立日期</td>
-<td>文件建立日期</td>
-</tr>
-<tr>
-<td>updated</td>
-<td>更新日期</td>
-<td>文件更新日期</td>
-</tr>
-<tr>
-<td>comments</td>
-<td>开启评论</td>
-<td>true</td>
-</tr>
-<tr>
-<td>tags</td>
-<td>标签</td>
-<td></td>
-</tr>
-<tr>
-<td>categories</td>
-<td>分类</td>
-<td></td>
-</tr>
-<tr>
-<td>permalink</td>
-<td>覆盖文章网址</td>
-<td>无</td>
-</tr>
-</tbody></table>
-<p>设置好开头的变量以后便可以使用typora等编辑器编写文章，写好的文章通过命令部署后即可完成上传。</p>
+<h4 id="GDB命令"><a href="#GDB命令" class="headerlink" title="GDB命令"></a>GDB命令</h4><h5 id="启动，退出，查看代码"><a href="#启动，退出，查看代码" class="headerlink" title="启动，退出，查看代码"></a>启动，退出，查看代码</h5><ul>
+<li>启动和退出<ul>
+<li>gdb filename</li>
+<li>quit</li>
+</ul>
+</li>
+<li>设置和获取程序执行参数<ul>
+<li>set args 10 20</li>
+<li>show args</li>
+</ul>
+</li>
+<li>GDB使用帮助<ul>
+<li>help</li>
+</ul>
+</li>
+<li>查看当前文件代码<ul>
+<li>list （从默认位置显示）</li>
+<li>list line_num（从指定行显示）</li>
+<li>list fun_name（从指定函数显示）</li>
+</ul>
+</li>
+<li>查看非当前文件代码<ul>
+<li>list filename : line_num</li>
+<li>list filename : fun_name</li>
+</ul>
+</li>
+<li>设置显示的行数<ul>
+<li>show listsize</li>
+<li>set listsize</li>
+</ul>
+</li>
+</ul>
+<h5 id="断点操作"><a href="#断点操作" class="headerlink" title="断点操作"></a>断点操作</h5><ul>
+<li>设置断点<ul>
+<li>break line_num</li>
+<li>break fun_name</li>
+<li>break filename : line_num</li>
+<li>break filename : fun_name</li>
+</ul>
+</li>
+<li>查看断点<ul>
+<li>info break</li>
+</ul>
+</li>
+<li>删除断点<ul>
+<li>delete break_num</li>
+</ul>
+</li>
+<li>设置断点无效<ul>
+<li>disable break_num</li>
+</ul>
+</li>
+<li>设置断点生效<ul>
+<li>enable break_num</li>
+</ul>
+</li>
+<li>设置条件断点<ul>
+<li>break 10 if i&#x3D;&#x3D;5</li>
+</ul>
+</li>
+</ul>
+<h5 id="调试命令"><a href="#调试命令" class="headerlink" title="调试命令"></a>调试命令</h5><ul>
+<li>运行GDB程序<ul>
+<li>start （程序停在第一行）</li>
+<li>run （执行到第一个断点停止）</li>
+</ul>
+</li>
+<li>继续运行直到下个断点<ul>
+<li>continue</li>
+</ul>
+</li>
+<li>向下执行一行（遇到函数不会进入函数体）<ul>
+<li>next</li>
+</ul>
+</li>
+<li>变量操作<ul>
+<li>p</li>
+</ul>
+</li>
+</ul>
 
     </div>
 
@@ -363,7 +395,9 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E5%8D%9A%E5%AE%A2%E4%BD%BF%E7%94%A8/" rel="tag"># 博客使用</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/C/" rel="tag"># C++</a>
+              <a href="/tags/GDB/" rel="tag"># GDB</a>
           </div>
 
         
@@ -372,13 +406,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/05/10/hello-world/" rel="prev" title="Hello World">
-      <i class="fa fa-chevron-left"></i> Hello World
+    <a href="/2022/05/11/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89MakeFile%E5%85%A5%E9%97%A8/" rel="prev" title="Linux系统编程（二）MakeFile入门">
+      <i class="fa fa-chevron-left"></i> Linux系统编程（二）MakeFile入门
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/05/11/%E6%B5%8B%E8%AF%95/" rel="next" title="测试">
-      测试 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -438,7 +469,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA%E6%96%87%E7%AB%A0"><span class="nav-number">1.</span> <span class="nav-text">新建文章</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Front-matter%E8%AE%BE%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">Front-matter设置</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#GDB%E8%B0%83%E8%AF%95%E5%99%A8%E5%85%A5%E9%97%A8"><span class="nav-number">1.</span> <span class="nav-text">GDB调试器入门</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GDB%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">GDB简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GDB%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.</span> <span class="nav-text">GDB命令</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%EF%BC%8C%E9%80%80%E5%87%BA%EF%BC%8C%E6%9F%A5%E7%9C%8B%E4%BB%A3%E7%A0%81"><span class="nav-number">1.2.1.</span> <span class="nav-text">启动，退出，查看代码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%96%AD%E7%82%B9%E6%93%8D%E4%BD%9C"><span class="nav-number">1.2.2.</span> <span class="nav-text">断点操作</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.3.</span> <span class="nav-text">调试命令</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

@@ -22,22 +22,22 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="新建文章使用命令新建文章 1hexo new [layout] &lt;title&gt;  new：文章创建命令 layout：文章布局，默认post，可以不填 title：文章标题兼文件名 文件存储路径为：source&#x2F;_posts 123$ hexo new &quot;如何在hexo上创建一篇文章&quot;INFO  Validating configINFO  Created">
+  <meta name="description" content="MakeFile的简单使用什么是MakeFile？一个工程中的源代码文件有很多，结构也很复杂，它们按照功能和模块放在若干不同的目录，如果一次次的使用gcc命令来编译是非常繁琐的。makefile制定了一系列规则，可以让用户定义哪些文件先编译，哪些文件后编译，哪些文件需要重新编译等等操作，它就像是编译工程的脚本文件。 MakeFile的要素 命名：makefile，Makefile 目标：最终要生成">
 <meta property="og:type" content="article">
-<meta property="og:title" content="如何在hexo上创建一篇文章">
-<meta property="og:url" content="http://example.com/2022/05/11/%E5%A6%82%E4%BD%95%E5%9C%A8hexo%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/index.html">
+<meta property="og:title" content="Linux系统编程（二）MakeFile入门">
+<meta property="og:url" content="http://example.com/2022/05/11/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89MakeFile%E5%85%A5%E9%97%A8/index.html">
 <meta property="og:site_name" content="未来道具研究所">
-<meta property="og:description" content="新建文章使用命令新建文章 1hexo new [layout] &lt;title&gt;  new：文章创建命令 layout：文章布局，默认post，可以不填 title：文章标题兼文件名 文件存储路径为：source&#x2F;_posts 123$ hexo new &quot;如何在hexo上创建一篇文章&quot;INFO  Validating configINFO  Created">
+<meta property="og:description" content="MakeFile的简单使用什么是MakeFile？一个工程中的源代码文件有很多，结构也很复杂，它们按照功能和模块放在若干不同的目录，如果一次次的使用gcc命令来编译是非常繁琐的。makefile制定了一系列规则，可以让用户定义哪些文件先编译，哪些文件后编译，哪些文件需要重新编译等等操作，它就像是编译工程的脚本文件。 MakeFile的要素 命名：makefile，Makefile 目标：最终要生成">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2022/05/11/%E5%A6%82%E4%BD%95%E5%9C%A8hexo%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/1.png">
-<meta property="article:published_time" content="2022-05-10T16:27:31.000Z">
-<meta property="article:modified_time" content="2022-05-10T16:59:07.522Z">
+<meta property="article:published_time" content="2022-05-11T11:18:28.000Z">
+<meta property="article:modified_time" content="2022-05-11T12:15:51.204Z">
 <meta property="article:author" content="Lily">
-<meta property="article:tag" content="博客使用">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="makefile">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2022/05/11/%E5%A6%82%E4%BD%95%E5%9C%A8hexo%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/1.png">
 
-<link rel="canonical" href="http://example.com/2022/05/11/%E5%A6%82%E4%BD%95%E5%9C%A8hexo%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/">
+<link rel="canonical" href="http://example.com/2022/05/11/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89MakeFile%E5%85%A5%E9%97%A8/">
 
 
 <script id="page-configurations">
@@ -50,7 +50,7 @@
   };
 </script>
 
-  <title>如何在hexo上创建一篇文章 | 未来道具研究所</title>
+  <title>Linux系统编程（二）MakeFile入门 | 未来道具研究所</title>
   
 
 
@@ -199,7 +199,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/11/%E5%A6%82%E4%BD%95%E5%9C%A8hexo%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/11/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89MakeFile%E5%85%A5%E9%97%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -212,7 +212,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          如何在hexo上创建一篇文章
+          Linux系统编程（二）MakeFile入门
         </h1>
 
         <div class="post-meta">
@@ -224,7 +224,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-05-11 00:27:31 / 修改时间：00:59:07" itemprop="dateCreated datePublished" datetime="2022-05-11T00:27:31+08:00">2022-05-11</time>
+              <time title="创建时间：2022-05-11 19:18:28 / 修改时间：20:15:51" itemprop="dateCreated datePublished" datetime="2022-05-11T19:18:28+08:00">2022-05-11</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -232,12 +232,20 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%8D%9A%E5%AE%A2/" itemprop="url" rel="index"><span itemprop="name">博客</span></a>
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">Linux服务器开发</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%80%E5%8F%91/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">Linux系统编程</span></a>
                 </span>
             </span>
 
           
-            <span id="/2022/05/11/%E5%A6%82%E4%BD%95%E5%9C%A8hexo%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/" class="post-meta-item leancloud_visitors" data-flag-title="如何在hexo上创建一篇文章" title="阅读次数">
+            <span id="/2022/05/11/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89MakeFile%E5%85%A5%E9%97%A8/" class="post-meta-item leancloud_visitors" data-flag-title="Linux系统编程（二）MakeFile入门" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -252,8 +260,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2022/05/11/%E5%A6%82%E4%BD%95%E5%9C%A8hexo%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2022/05/11/%E5%A6%82%E4%BD%95%E5%9C%A8hexo%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/" itemprop="commentCount"></span>
+    <a title="valine" href="/2022/05/11/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89MakeFile%E5%85%A5%E9%97%A8/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/05/11/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89MakeFile%E5%85%A5%E9%97%A8/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -263,7 +271,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>484</span>
+              <span>715</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -282,69 +290,31 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h4 id="新建文章"><a href="#新建文章" class="headerlink" title="新建文章"></a>新建文章</h4><p>使用命令新建文章</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new [layout] &lt;title&gt;</span><br></pre></td></tr></table></figure>
+        <h3 id="MakeFile的简单使用"><a href="#MakeFile的简单使用" class="headerlink" title="MakeFile的简单使用"></a>MakeFile的简单使用</h3><h4 id="什么是MakeFile？"><a href="#什么是MakeFile？" class="headerlink" title="什么是MakeFile？"></a>什么是MakeFile？</h4><p>一个工程中的源代码文件有很多，结构也很复杂，它们按照功能和模块放在若干不同的目录，如果一次次的使用gcc命令来编译是非常繁琐的。makefile制定了一系列规则，可以让用户定义哪些文件先编译，哪些文件后编译，哪些文件需要重新编译等等操作，它就像是编译工程的脚本文件。</p>
+<h4 id="MakeFile的要素"><a href="#MakeFile的要素" class="headerlink" title="MakeFile的要素"></a>MakeFile的要素</h4><ul>
+<li>命名：makefile，Makefile</li>
+<li>目标：最终要生成的文件</li>
+<li>依赖：生成目标文件所需的文件或目标</li>
+<li>命令：通过执行命令对依赖操作生成目标</li>
+</ul>
+<h4 id="MakeFile语法"><a href="#MakeFile语法" class="headerlink" title="MakeFile语法"></a>MakeFile语法</h4><h5 id="MakeFile基础语法"><a href="#MakeFile基础语法" class="headerlink" title="MakeFile基础语法"></a>MakeFile基础语法</h5><p>下面是最简单的使用，将指定的若干源文件生成可执行文件app。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">app:sub.c add.c mult.c divide.c main.c</span></span><br><span class="line">    gcc sub.c add.c mult.c divide.c main.c -o app</span><br></pre></td></tr></table></figure>
 
-<p>new：文章创建命令</p>
-<p>layout：文章布局，默认post，可以不填</p>
-<p>title：文章标题兼文件名</p>
-<p>文件存储路径为：source&#x2F;_posts</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new &quot;如何在hexo上创建一篇文章&quot;</span><br><span class="line">INFO  Validating config</span><br><span class="line">INFO  Created: ~\Desktop\Programing\notes\MyBlog\source\_posts\如何在hexo上创建一篇文章.md</span><br></pre></td></tr></table></figure>
+<h5 id="MakeFile变量"><a href="#MakeFile变量" class="headerlink" title="MakeFile变量"></a>MakeFile变量</h5><p>Makefile允许用户定义变量，语法如下。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var = value</span><br></pre></td></tr></table></figure>
 
-<p>如上使用命令创建一篇名为“如何在hexo上创建一篇文章”的文章</p>
-<h4 id="Front-matter设置"><a href="#Front-matter设置" class="headerlink" title="Front-matter设置"></a>Front-matter设置</h4><p>Front-matter是指定文章属性变量的一块区域</p>
-<p><img src="/2022/05/11/%E5%A6%82%E4%BD%95%E5%9C%A8hexo%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/1.png" alt="1"></p>
-<p>下表为一些预定义的参数</p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>描述</th>
-<th>默认值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>layout</td>
-<td>布局</td>
-<td>无</td>
-</tr>
-<tr>
-<td>title</td>
-<td>标题</td>
-<td>无</td>
-</tr>
-<tr>
-<td>date</td>
-<td>建立日期</td>
-<td>文件建立日期</td>
-</tr>
-<tr>
-<td>updated</td>
-<td>更新日期</td>
-<td>文件更新日期</td>
-</tr>
-<tr>
-<td>comments</td>
-<td>开启评论</td>
-<td>true</td>
-</tr>
-<tr>
-<td>tags</td>
-<td>标签</td>
-<td></td>
-</tr>
-<tr>
-<td>categories</td>
-<td>分类</td>
-<td></td>
-</tr>
-<tr>
-<td>permalink</td>
-<td>覆盖文章网址</td>
-<td>无</td>
-</tr>
-</tbody></table>
-<p>设置好开头的变量以后便可以使用typora等编辑器编写文章，写好的文章通过命令部署后即可完成上传。</p>
+<p>Makefile内置了一些预定义变量，下面列出几个常用的预定义变量。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">AR: 归档维护程序的名称，默认 ar</span></span><br><span class="line"><span class="section">CC: C编译器的名称，默认 cc</span></span><br><span class="line"><span class="section">CXX: C++编译器名称，默认g++</span></span><br><span class="line"><span class="variable">$@</span>:目标的完整名称</span><br><span class="line"><span class="variable">$&lt;</span>：第一个依赖文件的名称</span><br><span class="line"><span class="variable">$^</span>: 所有的依赖文件</span><br><span class="line">$(变量名)：获取变量值</span><br></pre></td></tr></table></figure>
+
+<h5 id="MakeFile函数"><a href="#MakeFile函数" class="headerlink" title="MakeFile函数"></a>MakeFile函数</h5><p>获取指定目录下指定类型的文件列表</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 获取当前目录以及./sub/目录下的.c文件</span></span><br><span class="line"><span class="variable">$(<span class="built_in">wildcard</span> *.c ./sub/*.c)</span></span><br></pre></td></tr></table></figure>
+
+<p>模式字符串替换</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将x.c bar.c fuck.c替换为.o</span></span><br><span class="line"><span class="variable">$(<span class="built_in">patsubst</span> %.c, %.o, x.c bar.c fuck.c)</span></span><br></pre></td></tr></table></figure>
+
+<p>删除文件</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 删除掉不需要的.o文件</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm <span class="variable">$(objs)</span> -f</span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -363,7 +333,9 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E5%8D%9A%E5%AE%A2%E4%BD%BF%E7%94%A8/" rel="tag"># 博客使用</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/C/" rel="tag"># C++</a>
+              <a href="/tags/makefile/" rel="tag"># makefile</a>
           </div>
 
         
@@ -372,12 +344,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/05/10/hello-world/" rel="prev" title="Hello World">
-      <i class="fa fa-chevron-left"></i> Hello World
+    <a href="/2022/05/11/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89GCC%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/" rel="prev" title="Linux系统编程（一）GCC工作流程">
+      <i class="fa fa-chevron-left"></i> Linux系统编程（一）GCC工作流程
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/05/11/%E6%B5%8B%E8%AF%95/" rel="next" title="测试">
-      测试 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/05/11/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89GDB%E8%B0%83%E8%AF%95%E5%85%A5%E9%97%A8/" rel="next" title="Linux系统编程（三）GDB调试入门">
+      Linux系统编程（三）GDB调试入门 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -438,7 +410,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA%E6%96%87%E7%AB%A0"><span class="nav-number">1.</span> <span class="nav-text">新建文章</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Front-matter%E8%AE%BE%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">Front-matter设置</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#MakeFile%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">MakeFile的简单使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFMakeFile%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">什么是MakeFile？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MakeFile%E7%9A%84%E8%A6%81%E7%B4%A0"><span class="nav-number">1.2.</span> <span class="nav-text">MakeFile的要素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MakeFile%E8%AF%AD%E6%B3%95"><span class="nav-number">1.3.</span> <span class="nav-text">MakeFile语法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#MakeFile%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="nav-number">1.3.1.</span> <span class="nav-text">MakeFile基础语法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MakeFile%E5%8F%98%E9%87%8F"><span class="nav-number">1.3.2.</span> <span class="nav-text">MakeFile变量</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MakeFile%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.3.</span> <span class="nav-text">MakeFile函数</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
