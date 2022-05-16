@@ -33,11 +33,11 @@
 <meta property="og:image" content="https://s2.loli.net/2022/05/14/KGsjhSk4FltZx9r.png">
 <meta property="og:image" content="https://s2.loli.net/2022/05/14/1Ay8GbHe4st3lPw.png">
 <meta property="article:published_time" content="2022-05-13T08:18:41.000Z">
-<meta property="article:modified_time" content="2022-05-13T17:48:01.324Z">
+<meta property="article:modified_time" content="2022-05-16T02:16:25.212Z">
 <meta property="article:author" content="Lily">
 <meta property="article:tag" content="Linux">
-<meta property="article:tag" content="进程通信">
 <meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="进程通信">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://s2.loli.net/2022/05/13/sKY8uemo2Tbr7XC.png">
 
@@ -234,7 +234,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-14 01:48:01" itemprop="dateModified" datetime="2022-05-14T01:48:01+08:00">2022-05-14</time>
+                <time title="修改时间：2022-05-16 10:16:25" itemprop="dateModified" datetime="2022-05-16T10:16:25+08:00">2022-05-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -281,14 +281,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>5.7k</span>
+              <span>8.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
+              <span>7 分钟</span>
             </span>
 
         </div>
@@ -569,6 +569,165 @@
 <li>子进程处在停止态，接受到SIGCONT后唤醒时。</li>
 <li>以上三种条件都会给父进程发送SIGCHILD信号，父进程默认忽略该信号。</li>
 </ul>
+<h4 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h4><p>共享内存允许两个或者多个进程共享物理内存的同一块区域（通常称为段），由于一个共享内存段会成为一个进程用户空间的一部分，因此共享内存机制无需内核介入，所有需要做的就是让一个进程将数据复制进共享内存中，并且这部分数据会对其他所有共享同一个段的进程可用。与管道相比，共享内存速度更快，但是会存在进程同步问题。</p>
+<h5 id="共享内存的使用"><a href="#共享内存的使用" class="headerlink" title="共享内存的使用"></a>共享内存的使用</h5><ul>
+<li>调用shmget()创建一个新共享内存段或者取得一个现有的共享内存段标识符，该函数返回目标共享内存标识符。</li>
+<li>调用shmat()附上共享内存段，使得这个段成为调用进程虚拟内存的一部分。</li>
+<li>此时程序中可以像使用其他可用内存一样使用共享内存段，为引用该内存段，需要shmat()返回的addr值，它是虚拟空间中该共享内存段的起点指针。</li>
+<li>调用shmdt()分离共享内存段，调用该函数后，进程无法再引用该共享内存，这一步可选，进程终止时会自动完成这一步。</li>
+<li>调用shmctl()来删除共享内存段，只有当前所有附加内存段的进程都与之分离后，内存段才会被销毁，只有一个进程需要执行这一步。</li>
+</ul>
+<h5 id="共享内存相关函数"><a href="#共享内存相关函数" class="headerlink" title="共享内存相关函数"></a>共享内存相关函数</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">shmget</span><span class="params">(<span class="type">key_t</span> key, <span class="type">size_t</span> size, <span class="type">int</span> shmflg)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>功能：创建一个新的共享内存段，或者获取一个现有的共享内存段标识符，新创建的内存段中的数据都初始化为0。</li>
+<li>参数：<ul>
+<li>key：key_t是一个整形，通过这个找到或者创建一个内存共享，一般用16进制表示，非0。</li>
+<li>size：共享内存大小，为页面大小整数倍</li>
+<li>shmflg：标志（访问权限或附加属性）<ul>
+<li>IPC_CREAT：如果共享内存不存在，则创建一个共享内存，否则打开操作。</li>
+<li>IPC_EXCL：只有在共享内存不存在的时候，新的共享内存才建立，否则就产生错误。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>返回值：成功返回共享内存的标识符；不成功返回-1，errno储存错误原因。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">标识符</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">EINVAL</td>
+<td align="center">参数size小于SHMMIN或大于SHMMAX。</td>
+</tr>
+<tr>
+<td align="center">EEXIST</td>
+<td align="center">预建立key所致的共享内存，但已经存在。</td>
+</tr>
+<tr>
+<td align="center">EIDRM</td>
+<td align="center">参数key所致的共享内存已经删除。</td>
+</tr>
+<tr>
+<td align="center">ENOSPC</td>
+<td align="center">超过了系统允许建立的共享内存的最大值(SHMALL )。</td>
+</tr>
+<tr>
+<td align="center">ENOENT</td>
+<td align="center">参数key所指的共享内存不存在，参数shmflg也未设IPC_CREAT位。</td>
+</tr>
+<tr>
+<td align="center">EACCES</td>
+<td align="center">没有权限。</td>
+</tr>
+<tr>
+<td align="center">ENOMEM</td>
+<td align="center">核心内存不足。</td>
+</tr>
+</tbody></table>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> *<span class="title function_">shmat</span><span class="params">(<span class="type">int</span> shmid, <span class="type">const</span> <span class="type">void</span>* shmaddr, <span class="type">int</span> shmflg)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>功能：将共享内存和当前进程关联。</li>
+<li>参数：<ul>
+<li>shimid：共享内存标识符，由shmget返回值获取。</li>
+<li>shmaddr：申请的共享内存起始地址，指定nullptr由内核指定。</li>
+<li>shmflg：对共享内存的操作。<ul>
+<li>读：SHM_RDONLY，读权限是必须的。</li>
+<li>读写：0。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>返回值：返回共享内存首地址，失败(void*)-1。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">shmdt</span><span class="params">(<span class="type">const</span> <span class="type">void</span>* shmaddr)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>功能：解除当前进程和共享内存的关联</li>
+<li>参数：<ul>
+<li>shmaddr：共享内存首地址。</li>
+</ul>
+</li>
+<li>返回值：成功0，失败-1。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">shmctl</span><span class="params">(<span class="type">int</span> shmid, <span class="type">int</span> cmd, <span class="keyword">struct</span> shmid_ds *buf)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>功能：对共享内存进行操作，删除共享内存。共享内存要删除才能消失，创建。</li>
+<li>参数：<ul>
+<li>shmid：共享内存的ID。</li>
+<li>cmd：要做的操作。<ul>
+<li>IPC_STAT：获取共享内存当前状态。</li>
+<li>IPC_SET：设置共享内存的状态。</li>
+<li>IPC_RMID：标记共享内存被销毁。</li>
+</ul>
+</li>
+<li>buf：需要设置或者获取的共享内存的属性信息。<ul>
+<li>IPC_STAT：buf存储数据。</li>
+<li>IPC_SET：buf中需要初始化数据，设置到内核中。</li>
+<li>IPC_RMID：没用，nullptr。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>返回值：成功0，失败-1。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">key_t</span> <span class="title function_">ftok</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* pathname, <span class="type">int</span> proj_id)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>功能：根据指定路径名和int值，生成一个共享内存的key。</li>
+<li>参数：<ul>
+<li>pathname：指定一个存在的路径。</li>
+<li>proj_id：int类型，但是这个系统调用只会使用其中一个字节。范围是0~255，一般指定一个字符’a’。</li>
+</ul>
+</li>
+<li>返回值：生成的key。</li>
+</ul>
+<h5 id="共享内存有关的命令"><a href="#共享内存有关的命令" class="headerlink" title="共享内存有关的命令"></a>共享内存有关的命令</h5><h6 id="ipcs命令："><a href="#ipcs命令：" class="headerlink" title="ipcs命令："></a>ipcs命令：</h6><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ipcs -a #打印当前系统中所有进程间通信方式信息</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ipcs -m	#打印使用共享内存进行进程通信的信息</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ipcs -q	#打印使用消息队列进行进程通信的信息</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ipcs -s	#打印使用信号进行进程间通信的信息</span><br></pre></td></tr></table></figure>
+
+<h6 id="ipcrm命令："><a href="#ipcrm命令：" class="headerlink" title="ipcrm命令："></a>ipcrm命令：</h6><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ipcrm -M shmkey	#移除用shmkey创建的共享内存段</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ipcrm -m shmid	#移除用shmid标识的共享内存段</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ipcrm -Q msgkey	#移除用msgkey创建的消息队列</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ipcrm -q msqid	#移除用msqid标识的消息队列</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ipcrm -S semkey	#移除用semkey创建的信号</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ipcrm -s semid	#移除用semid标识的信号</span><br></pre></td></tr></table></figure>
+
+<h5 id="共享内存tips"><a href="#共享内存tips" class="headerlink" title="共享内存tips"></a>共享内存tips</h5><h6 id="操作系统如何知道一块共享内存被多少进程关联？"><a href="#操作系统如何知道一块共享内存被多少进程关联？" class="headerlink" title="操作系统如何知道一块共享内存被多少进程关联？"></a>操作系统如何知道一块共享内存被多少进程关联？</h6><p>共享内存维护了一个结构体<strong>struct shmid_ds</strong>，该结构体有一个成员<strong>shm_nattch</strong>，	<strong>shm_nattch</strong>记录了关联的进程个数。</p>
+<h6 id="可不可以对共享内存进行多次删除shmctl？"><a href="#可不可以对共享内存进行多次删除shmctl？" class="headerlink" title="可不可以对共享内存进行多次删除shmctl？"></a>可不可以对共享内存进行多次删除shmctl？</h6><p>可以，因为shmctl标记删除共享内存，而不是直接删除。当和共享内存关联的进程数为0的时候，才被真正删除。当共享内存的key为0时表示共享内存被标记删除了。如果一个进程和共享内存取消关联，它就不能再继续操作这个共享内存，也不能重新关联。</p>
+<h6 id="共享内存和内存映射的区别？"><a href="#共享内存和内存映射的区别？" class="headerlink" title="共享内存和内存映射的区别？"></a>共享内存和内存映射的区别？</h6><p>共享内存可以直接创建，内存映射需要磁盘文件，由于不需要内核态切换，共享内存的效率相对更高。</p>
+<ul>
+<li>内存方面：<ul>
+<li>共享内存中，所有进程操作的是同一块共享内存。</li>
+<li>内存映射中，每个进程在自己的虚拟地址空间中有一个独立的内存。</li>
+</ul>
+</li>
+<li>数据安全方面：<ul>
+<li>进程突然退出时，共享内存还在，内存映射区消失。</li>
+<li>运行进程的电脑宕机时，数据存在共享内存中，没有了。内存映射区的数据由于磁盘文件还在，所以内存映射区的数据还存在。</li>
+</ul>
+</li>
+<li>生命周期方面：<ul>
+<li>内存映射：进程退出，内存映射区销毁</li>
+<li>共享内存：进程退出，共享内存还在，标记删除（所有的关联的进程数为0），或者关机，如果一个进程退出，会自动和共享内存取消关联。</li>
+</ul>
+</li>
+</ul>
 
     </div>
 
@@ -588,8 +747,8 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Linux/" rel="tag"># Linux</a>
-              <a href="/tags/%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/" rel="tag"># 进程通信</a>
               <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"># 操作系统</a>
+              <a href="/tags/%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/" rel="tag"># 进程通信</a>
           </div>
 
         
@@ -601,7 +760,10 @@
     <a href="/2022/05/13/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%94%EF%BC%89%E8%BF%9B%E7%A8%8B%E6%A6%82%E8%BF%B0/" rel="prev" title="Linux系统编程（五）进程概述">
       <i class="fa fa-chevron-left"></i> Linux系统编程（五）进程概述
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/16/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%83%EF%BC%89%E8%BF%9B%E7%A8%8B%E7%BB%84%EF%BC%8C%E4%BC%9A%E8%AF%9D%EF%BC%8C%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/" rel="next" title="Linux系统编程（七）进程组，会话，守护进程">
+      Linux系统编程（七）进程组，会话，守护进程 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -661,7 +823,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="nav-number">1.</span> <span class="nav-text">进程间通信</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">进程通信的概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%A1%E9%81%93%E9%80%9A%E4%BF%A1"><span class="nav-number">1.2.</span> <span class="nav-text">管道通信</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AE%A1%E9%81%93%E9%80%9A%E4%BF%A1%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E5%8E%9F%E7%90%86"><span class="nav-number">1.2.1.</span> <span class="nav-text">管道通信的概念和原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AE%A1%E9%81%93%E8%AF%BB%E5%86%99%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number">1.2.2.</span> <span class="nav-text">管道读写的方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8C%BF%E5%90%8D%E7%AE%A1%E9%81%93"><span class="nav-number">1.2.3.</span> <span class="nav-text">匿名管道</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9C%89%E5%90%8D%E7%AE%A1%E9%81%93"><span class="nav-number">1.2.4.</span> <span class="nav-text">有名管道</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%9C%89%E5%90%8D%E7%AE%A1%E9%81%93%E5%8C%BA%E5%88%AB%E4%BA%8E%E5%8C%BF%E5%90%8D%E7%AE%A1%E9%81%93%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">有名管道区别于匿名管道的地方</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84"><span class="nav-number">1.3.</span> <span class="nav-text">内存映射</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="nav-number">1.3.1.</span> <span class="nav-text">内存映射的概念和使用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84tips"><span class="nav-number">1.3.2.</span> <span class="nav-text">内存映射tips</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.4.</span> <span class="nav-text">信号</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E4%BF%A1%E5%8F%B7%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">1.4.1.</span> <span class="nav-text">发送信号的情况</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E4%BF%A1%E5%8F%B7%E7%9A%84%E7%9B%AE%E7%9A%84%EF%BC%9A"><span class="nav-number">1.4.2.</span> <span class="nav-text">使用信号的目的：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E7%9A%84%E9%BB%98%E8%AE%A4%E5%A4%84%E7%90%86%E5%8A%A8%E4%BD%9C"><span class="nav-number">1.4.3.</span> <span class="nav-text">信号的默认处理动作</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0"><span class="nav-number">1.4.4.</span> <span class="nav-text">信号相关函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%9B%86"><span class="nav-number">1.4.5.</span> <span class="nav-text">信号集</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%9B%86%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0"><span class="nav-number">1.4.6.</span> <span class="nav-text">信号集相关函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%86%85%E6%A0%B8%E5%AE%9E%E7%8E%B0%E4%BF%A1%E5%8F%B7%E6%8D%95%E6%8D%89%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="nav-number">1.4.7.</span> <span class="nav-text">内核实现信号捕捉的流程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#SIGCHLD%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.4.8.</span> <span class="nav-text">SIGCHLD信号</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="nav-number">1.</span> <span class="nav-text">进程间通信</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">进程通信的概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%A1%E9%81%93%E9%80%9A%E4%BF%A1"><span class="nav-number">1.2.</span> <span class="nav-text">管道通信</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AE%A1%E9%81%93%E9%80%9A%E4%BF%A1%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E5%8E%9F%E7%90%86"><span class="nav-number">1.2.1.</span> <span class="nav-text">管道通信的概念和原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AE%A1%E9%81%93%E8%AF%BB%E5%86%99%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number">1.2.2.</span> <span class="nav-text">管道读写的方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8C%BF%E5%90%8D%E7%AE%A1%E9%81%93"><span class="nav-number">1.2.3.</span> <span class="nav-text">匿名管道</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9C%89%E5%90%8D%E7%AE%A1%E9%81%93"><span class="nav-number">1.2.4.</span> <span class="nav-text">有名管道</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%9C%89%E5%90%8D%E7%AE%A1%E9%81%93%E5%8C%BA%E5%88%AB%E4%BA%8E%E5%8C%BF%E5%90%8D%E7%AE%A1%E9%81%93%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">有名管道区别于匿名管道的地方</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84"><span class="nav-number">1.3.</span> <span class="nav-text">内存映射</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="nav-number">1.3.1.</span> <span class="nav-text">内存映射的概念和使用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84tips"><span class="nav-number">1.3.2.</span> <span class="nav-text">内存映射tips</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.4.</span> <span class="nav-text">信号</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E4%BF%A1%E5%8F%B7%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">1.4.1.</span> <span class="nav-text">发送信号的情况</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E4%BF%A1%E5%8F%B7%E7%9A%84%E7%9B%AE%E7%9A%84%EF%BC%9A"><span class="nav-number">1.4.2.</span> <span class="nav-text">使用信号的目的：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E7%9A%84%E9%BB%98%E8%AE%A4%E5%A4%84%E7%90%86%E5%8A%A8%E4%BD%9C"><span class="nav-number">1.4.3.</span> <span class="nav-text">信号的默认处理动作</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0"><span class="nav-number">1.4.4.</span> <span class="nav-text">信号相关函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%9B%86"><span class="nav-number">1.4.5.</span> <span class="nav-text">信号集</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%9B%86%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0"><span class="nav-number">1.4.6.</span> <span class="nav-text">信号集相关函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%86%85%E6%A0%B8%E5%AE%9E%E7%8E%B0%E4%BF%A1%E5%8F%B7%E6%8D%95%E6%8D%89%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="nav-number">1.4.7.</span> <span class="nav-text">内核实现信号捕捉的流程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#SIGCHLD%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.4.8.</span> <span class="nav-text">SIGCHLD信号</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="nav-number">1.5.</span> <span class="nav-text">共享内存</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">1.5.1.</span> <span class="nav-text">共享内存的使用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0"><span class="nav-number">1.5.2.</span> <span class="nav-text">共享内存相关函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%9C%89%E5%85%B3%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="nav-number">1.5.3.</span> <span class="nav-text">共享内存有关的命令</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#ipcs%E5%91%BD%E4%BB%A4%EF%BC%9A"><span class="nav-number">1.5.3.1.</span> <span class="nav-text">ipcs命令：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#ipcrm%E5%91%BD%E4%BB%A4%EF%BC%9A"><span class="nav-number">1.5.3.2.</span> <span class="nav-text">ipcrm命令：</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98tips"><span class="nav-number">1.5.4.</span> <span class="nav-text">共享内存tips</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A6%82%E4%BD%95%E7%9F%A5%E9%81%93%E4%B8%80%E5%9D%97%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E8%A2%AB%E5%A4%9A%E5%B0%91%E8%BF%9B%E7%A8%8B%E5%85%B3%E8%81%94%EF%BC%9F"><span class="nav-number">1.5.4.1.</span> <span class="nav-text">操作系统如何知道一块共享内存被多少进程关联？</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%8F%AF%E4%B8%8D%E5%8F%AF%E4%BB%A5%E5%AF%B9%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E8%BF%9B%E8%A1%8C%E5%A4%9A%E6%AC%A1%E5%88%A0%E9%99%A4shmctl%EF%BC%9F"><span class="nav-number">1.5.4.2.</span> <span class="nav-text">可不可以对共享内存进行多次删除shmctl？</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E5%92%8C%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">1.5.4.3.</span> <span class="nav-text">共享内存和内存映射的区别？</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -677,7 +839,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -731,12 +893,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">15k</span>
+    <span title="站点总字数">19k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">13 分钟</span>
+    <span title="站点阅读时长">17 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
