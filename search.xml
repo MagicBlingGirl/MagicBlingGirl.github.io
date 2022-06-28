@@ -4,6 +4,41 @@
   
     
     <entry>
+      <title>Linux网络编程（二）IO多路复用</title>
+      <link href="/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/"/>
+      <url>/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/</url>
+      
+        <content type="html"><![CDATA[<p><img src="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/0519-02.jpg"></p><span id="more"></span><h3 id="IO多路复用"><a href="#IO多路复用" class="headerlink" title="IO多路复用"></a>IO多路复用</h3><p>Hi!!!!!</p><p>Fuck！</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 学习笔记 </category>
+          
+          <category> Linux服务器开发 </category>
+          
+          <category> Linux网络编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+            <tag> IO多路复用 </tag>
+            
+            <tag> epoll </tag>
+            
+            <tag> 服务器开发 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Linux网络编程（一）使用socket进行网络通信</title>
       <link href="/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89%E4%BD%BF%E7%94%A8socket%E8%BF%9B%E8%A1%8C%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/"/>
       <url>/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89%E4%BD%BF%E7%94%A8socket%E8%BF%9B%E8%A1%8C%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/</url>
