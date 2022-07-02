@@ -23,22 +23,25 @@
   </script>
 
   <meta property="og:type" content="article">
-<meta property="og:title" content="Linux网络编程（二）IO多路复用">
-<meta property="og:url" content="http://example.com/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/index.html">
+<meta property="og:title" content="并发服务器设计（一）IO多路复用">
+<meta property="og:url" content="http://example.com/2022/05/18/%E5%B9%B6%E5%8F%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AE%BE%E8%AE%A1%EF%BC%88%E4%B8%80%EF%BC%89IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/index.html">
 <meta property="og:site_name" content="未来道具研究所">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/0519-02.jpg">
+<meta property="og:image" content="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/0629-1.png">
+<meta property="og:image" content="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/%E7%BD%91%E7%BB%9Cio%E6%B5%81%E7%A8%8B.png">
+<meta property="og:image" content="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/%E7%AE%80%E5%8D%95%E5%A4%9A%E7%BA%BF%E7%A8%8BIO.png">
+<meta property="og:image" content="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.png">
 <meta property="article:published_time" content="2022-05-18T15:52:39.000Z">
-<meta property="article:modified_time" content="2022-06-28T14:45:10.226Z">
+<meta property="article:modified_time" content="2022-07-02T08:07:52.142Z">
 <meta property="article:author" content="Lily">
-<meta property="article:tag" content="Linux">
 <meta property="article:tag" content="IO多路复用">
 <meta property="article:tag" content="epoll">
 <meta property="article:tag" content="服务器开发">
+<meta property="article:tag" content="Linux网络编程">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/0519-02.jpg">
+<meta name="twitter:image" content="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/0629-1.png">
 
-<link rel="canonical" href="http://example.com/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/">
+<link rel="canonical" href="http://example.com/2022/05/18/%E5%B9%B6%E5%8F%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AE%BE%E8%AE%A1%EF%BC%88%E4%B8%80%EF%BC%89IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/">
 
 
 <script id="page-configurations">
@@ -51,7 +54,7 @@
   };
 </script>
 
-  <title>Linux网络编程（二）IO多路复用 | 未来道具研究所</title>
+  <title>并发服务器设计（一）IO多路复用 | 未来道具研究所</title>
   
 
 
@@ -200,7 +203,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/18/%E5%B9%B6%E5%8F%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AE%BE%E8%AE%A1%EF%BC%88%E4%B8%80%EF%BC%89IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -213,7 +216,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Linux网络编程（二）IO多路复用
+          并发服务器设计（一）IO多路复用
         </h1>
 
         <div class="post-meta">
@@ -231,7 +234,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-28 22:45:10" itemprop="dateModified" datetime="2022-06-28T22:45:10+08:00">2022-06-28</time>
+                <time title="修改时间：2022-07-02 16:07:52" itemprop="dateModified" datetime="2022-07-02T16:07:52+08:00">2022-07-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -247,12 +250,12 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%80%E5%8F%91/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">Linux网络编程</span></a>
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%80%E5%8F%91/%E7%BD%91%E7%BB%9C%E5%B9%B6%E5%8F%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AE%BE%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">网络并发服务器设计</span></a>
                 </span>
             </span>
 
           
-            <span id="/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/" class="post-meta-item leancloud_visitors" data-flag-title="Linux网络编程（二）IO多路复用" title="阅读次数">
+            <span id="/2022/05/18/%E5%B9%B6%E5%8F%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AE%BE%E8%AE%A1%EF%BC%88%E4%B8%80%EF%BC%89IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/" class="post-meta-item leancloud_visitors" data-flag-title="并发服务器设计（一）IO多路复用" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -267,8 +270,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/" itemprop="commentCount"></span>
+    <a title="valine" href="/2022/05/18/%E5%B9%B6%E5%8F%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AE%BE%E8%AE%A1%EF%BC%88%E4%B8%80%EF%BC%89IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/05/18/%E5%B9%B6%E5%8F%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AE%BE%E8%AE%A1%EF%BC%88%E4%B8%80%EF%BC%89IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -278,14 +281,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>18</span>
+              <span>1.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -297,12 +300,36 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><img src="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/0519-02.jpg"></p>
+        <p><img src="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/0629-1.png"></p>
 <span id="more"></span>
 
-<h3 id="IO多路复用"><a href="#IO多路复用" class="headerlink" title="IO多路复用"></a>IO多路复用</h3><p>Hi!!!!!</p>
-<p>Fuck！</p>
+<h3 id="何为IO模型"><a href="#何为IO模型" class="headerlink" title="何为IO模型"></a>何为IO模型</h3><h4 id="什么是网络IO"><a href="#什么是网络IO" class="headerlink" title="什么是网络IO"></a>什么是网络IO</h4><p>想必大家对磁盘IO都非常熟悉，要在Linux系统读取文件，要通过open获取一个文件描述符fd，然后调用read和write系统调用来进行读写，最后调用close把fd关闭掉。这就是磁盘IO的基本过程。其中I意味着Input，也就是read，O意味着Output，也就是write。那么IO的对象就是你目标的文件，在Linux中你通过文件描述符的方式对这个文件进行操作。</p>
+<p>网络IO和磁盘IO的过程实际上是类似的，只不过这个fd变成了socket，open的过程变成了网络连接建立的过程。网络IO就是向网络上的目标进行发送和接受数据的过程。在Linux中由于一切皆文件，socket也被抽象为一个文件，我们通过socket fd来进行网络数据的传输。</p>
+<h4 id="网络IO的过程"><a href="#网络IO的过程" class="headerlink" title="网络IO的过程"></a>网络IO的过程</h4><p>接下来简单介绍网络IO的流程，以TCP为例，在建立连接时发起方通过connect函数，接收方通过accept函数各自获得了用于socket通信的fd，连接正式建立，接下来通信双方就可以通过read和write系统调用来进行数据收发了。</p>
+<p>在Linux内核中维护了发送缓冲区和接收缓冲区，我们本质上是通过fd对这两块缓冲区进行读写，假设用户A要向用户B发送一条消息，实际上是做了下面的步骤：</p>
+<ol>
+<li>用户A将消息封包，通过write调用将消息发到TCP发送缓冲区</li>
+<li>消息从发送缓冲区发出，通过网络到达用户B的TCP接收缓冲区</li>
+<li>用户B通过read调用从TCP接收缓冲区读取消息数据，并将消息解包</li>
+</ol>
+<p><img src="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/%E7%BD%91%E7%BB%9Cio%E6%B5%81%E7%A8%8B.png" alt="TCP网络传输流程"></p>
+<h4 id="阻塞与非阻塞"><a href="#阻塞与非阻塞" class="headerlink" title="阻塞与非阻塞"></a>阻塞与非阻塞</h4><p>在得知网络IO的流程之后，接收数据时要调用read从接收缓冲区中读取数据。那么现在有一个问题，应用之间并非时时刻刻都在发送消息，那么当应用向接收缓冲区read时，此时接收缓冲区没有数据可读的话，该怎么办呢？或者当应用向发送缓冲区write时，发送缓冲区已经满了，该怎么办呢？是将函数直接返回还是持续等待？对这件事的处理态度就阻塞IO和非阻塞IO的区别了。</p>
+<p><strong>阻塞IO</strong>就是在用户发出IO请求后，如果数据没有就绪，则会进入阻塞态，交出处理器，当数据就绪时再接触阻塞，以read为例，如果当前缓冲区没有数据可读，线程会持续阻塞在read直到缓冲区有数据为止。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> ret = <span class="built_in">read</span>(fd, &amp;buf, len);</span><br></pre></td></tr></table></figure>
 
+
+
+<p><strong>非阻塞IO</strong>在用户发出IO请求后，可以直接得到一个返回结果，如果返回值是一个错误标识，则用户可以得知数据没有就绪，于是用户可以继续不断的循环尝试read，直到数据就绪为止，也就是说，非阻塞IO需要不断的去询问是否就绪，持续占用处理器。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">    <span class="type">int</span> ret = <span class="built_in">read</span>(fd, &amp;buf, len);</span><br><span class="line">    <span class="keyword">if</span>(ret != errno)&#123;</span><br><span class="line">        <span class="built_in">Process</span>(&amp;buf);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="IO多路复用技术"><a href="#IO多路复用技术" class="headerlink" title="IO多路复用技术"></a>IO多路复用技术</h3><h4 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h4><p>网络通信有时并非一对一的关系，对于服务器程序而言，同一时间可能会有N多个客户端发起请求并等待客户端响应，在这种并发场景下，一种很自然的想法是使用多线程，以保证并发场景下能够快速的让客户端收到响应。</p>
+<p><img src="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/%E7%AE%80%E5%8D%95%E5%A4%9A%E7%BA%BF%E7%A8%8BIO.png"></p>
+<p>这样看似解决了问题，当然如果你的服务器并发量非常小，比如只有十几个或者几十个，为每个连接单独分配一个线程是勉强可以接受的，但如果你的服务器有时会同时接受几十万数量级的并发，那么你要一次创建几十万个线程，这显然不太现实，而且一般情况下，大量并发的连接中，活跃的连接数是远小于总数的，这就会导致大量的线程资源被浪费，它们本可以去做其他事，却不得不一直等待IO，这显然不是一个很好的设计。</p>
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>如何实现更高效的利用线程资源的同时，满足客户端的响应速度，这就是IO多路复用解决的问题。</p>
+<p>IO多路复用的基本思路是只用一个线程来管理多个网络IO流。具体的实现方式是主线程使用一个IO复用器来筛选IO就绪的连接，然后为这些就绪的连接去分配线程进行处理。这样我们可以暂且忽略那些大部分不活跃的连接，集中为活跃连接服务，大大减少了线程资源的浪费。IO复用器的作用就是在所有的连接（fd）中筛选出读写事件就绪的连接（fd），因此暂且称它为Selector。</p>
+<p><img src="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.png"></p>
+<p>Selector的实现其实就是我们所熟知的select，poll，epoll这些IO复用技术了，它们是Linux系统提供的api，我们通过这些api来注册fd，并对fd们进行监听。</p>
+<h4 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h4><h5 id="select"><a href="#select" class="headerlink" title="select"></a>select</h5><h5 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h5><h5 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h5>
     </div>
 
     
@@ -320,10 +347,10 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Linux/" rel="tag"># Linux</a>
               <a href="/tags/IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/" rel="tag"># IO多路复用</a>
               <a href="/tags/epoll/" rel="tag"># epoll</a>
               <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%80%E5%8F%91/" rel="tag"># 服务器开发</a>
+              <a href="/tags/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" rel="tag"># Linux网络编程</a>
           </div>
 
         
@@ -332,8 +359,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89%E4%BD%BF%E7%94%A8socket%E8%BF%9B%E8%A1%8C%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/" rel="prev" title="Linux网络编程（一）使用socket进行网络通信">
-      <i class="fa fa-chevron-left"></i> Linux网络编程（一）使用socket进行网络通信
+    <a href="/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%9A%E4%BD%BF%E7%94%A8socket%E8%BF%9B%E8%A1%8C%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/" rel="prev" title="Linux网络编程：使用socket进行网络通信">
+      <i class="fa fa-chevron-left"></i> Linux网络编程：使用socket进行网络通信
     </a></div>
       <div class="post-nav-item"></div>
     </div>
@@ -395,7 +422,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">IO多路复用</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%95%E4%B8%BAIO%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">何为IO模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BD%91%E7%BB%9CIO"><span class="nav-number">1.1.</span> <span class="nav-text">什么是网络IO</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BD%91%E7%BB%9CIO%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">网络IO的过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%BB%E5%A1%9E%E4%B8%8E%E9%9D%9E%E9%98%BB%E5%A1%9E"><span class="nav-number">1.3.</span> <span class="nav-text">阻塞与非阻塞</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E6%8A%80%E6%9C%AF"><span class="nav-number">2.</span> <span class="nav-text">IO多路复用技术</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">2.1.</span> <span class="nav-text">动机</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">2.2.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%A1%88"><span class="nav-number">2.3.</span> <span class="nav-text">方案</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#select"><span class="nav-number">2.3.1.</span> <span class="nav-text">select</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#poll"><span class="nav-number">2.3.2.</span> <span class="nav-text">poll</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#epoll"><span class="nav-number">2.3.3.</span> <span class="nav-text">epoll</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -424,7 +451,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -465,12 +492,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">30k</span>
+    <span title="站点总字数">32k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">28 分钟</span>
+    <span title="站点阅读时长">29 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

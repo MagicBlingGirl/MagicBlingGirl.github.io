@@ -27,17 +27,17 @@
 <meta property="og:url" content="http://example.com/2022/05/13/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%94%EF%BC%89%E8%BF%9B%E7%A8%8B%E6%A6%82%E8%BF%B0/index.html">
 <meta property="og:site_name" content="未来道具研究所">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s2.loli.net/2022/05/13/Yi3QhLzmrWHMeol.png">
-<meta property="og:image" content="https://s2.loli.net/2022/05/13/evDzKl1nPgGmZYd.png">
-<meta property="og:image" content="https://s2.loli.net/2022/05/13/FSXxmCjcZLU5npt.png">
+<meta property="og:image" content="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/blog/0513-02.png">
+<meta property="og:image" content="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/%E5%9B%BE%E8%A7%A3/%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2.png">
+<meta property="og:image" content="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/%E5%9B%BE%E8%A7%A3/%E7%88%B6%E5%AD%90%E8%BF%9B%E7%A8%8B%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4.png">
 <meta property="article:published_time" content="2022-05-13T05:05:57.000Z">
-<meta property="article:modified_time" content="2022-05-13T17:47:48.015Z">
+<meta property="article:modified_time" content="2022-07-02T07:55:43.392Z">
 <meta property="article:author" content="Lily">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="进程">
 <meta property="article:tag" content="操作系统">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s2.loli.net/2022/05/13/Yi3QhLzmrWHMeol.png">
+<meta name="twitter:image" content="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/blog/0513-02.png">
 
 <link rel="canonical" href="http://example.com/2022/05/13/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%94%EF%BC%89%E8%BF%9B%E7%A8%8B%E6%A6%82%E8%BF%B0/">
 
@@ -232,7 +232,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-14 01:47:48" itemprop="dateModified" datetime="2022-05-14T01:47:48+08:00">2022-05-14</time>
+                <time title="修改时间：2022-07-02 15:55:43" itemprop="dateModified" datetime="2022-07-02T15:55:43+08:00">2022-07-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -298,7 +298,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><img src="https://s2.loli.net/2022/05/13/Yi3QhLzmrWHMeol.png"></p>
+        <p><img src="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/blog/0513-02.png"></p>
 <span id="more"></span>
 
 <h3 id="进程的概念和相关函数"><a href="#进程的概念和相关函数" class="headerlink" title="进程的概念和相关函数"></a>进程的概念和相关函数</h3><h4 id="进程概述"><a href="#进程概述" class="headerlink" title="进程概述"></a>进程概述</h4><p>进程是执行中的程序的实例，从操作系统内核的视角来看，进程是操作系统分配资源的基本单位。Linux中使用进程控制块PCB来描述一个进程。当程序被加载到内存中开始执行时，操作系统会为该进程分配一个PCB，记录该进程相关的信息。</p>
@@ -330,7 +330,7 @@
 <li>阻塞态：进程缺少运行所需的资源，等待某个事件的完成而无法继续执行。</li>
 </ul>
 <p>进程的状态转换关系可以用下图来表述：</p>
-<p><img src="https://s2.loli.net/2022/05/13/evDzKl1nPgGmZYd.png"></p>
+<p><img src="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/%E5%9B%BE%E8%A7%A3/%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2.png"></p>
 <h5 id="进程相关的命令"><a href="#进程相关的命令" class="headerlink" title="进程相关的命令"></a>进程相关的命令</h5><h6 id="ps命令查看进程静态信息"><a href="#ps命令查看进程静态信息" class="headerlink" title="ps命令查看进程静态信息"></a>ps命令查看进程静态信息</h6><ul>
 <li>a：显示终端上所有进程</li>
 <li>u：显示进程详细信息</li>
@@ -370,7 +370,7 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">pid_t</span> pid = fork();</span><br><span class="line"><span class="keyword">if</span>(pid == <span class="number">-1</span>)&#123;</span><br><span class="line">    <span class="comment">// 创建失败</span></span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(pid == <span class="number">0</span>)&#123;</span><br><span class="line">    <span class="comment">// 子进程逻辑</span></span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="comment">// 父进程逻辑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h5 id="父子进程虚拟地址空间情况"><a href="#父子进程虚拟地址空间情况" class="headerlink" title="父子进程虚拟地址空间情况"></a>父子进程虚拟地址空间情况</h5><p>fork函数的实现并非单纯的完全拷贝，而是采用写时拷贝的方法。一开始子进程和父进程是共享相同的物理地址空间的，读数据时也是共享，当发生写操作后，发生实际的拷贝操作。（读时共享，写时拷贝）这样可以减少内存复制的开销。</p>
-<p><img src="https://s2.loli.net/2022/05/13/FSXxmCjcZLU5npt.png"></p>
+<p><img src="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/%E5%9B%BE%E8%A7%A3/%E7%88%B6%E5%AD%90%E8%BF%9B%E7%A8%8B%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4.png"></p>
 <h5 id="父子进程的异同点"><a href="#父子进程的异同点" class="headerlink" title="父子进程的异同点"></a>父子进程的异同点</h5><h6 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h6><p>父进程从头开始执行，子进程从fork返回后开始执行。</p>
 <p>fork函数在父进程返回子进程pid，在子进程返回0。</p>
 <p>通过fork函数返回值不同区分父子进程。</p>
@@ -511,7 +511,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -552,12 +552,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">30k</span>
+    <span title="站点总字数">32k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">28 分钟</span>
+    <span title="站点阅读时长">29 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

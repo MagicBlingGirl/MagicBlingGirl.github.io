@@ -23,26 +23,26 @@
   </script>
 
   <meta property="og:type" content="article">
-<meta property="og:title" content="Linux网络编程（一）使用socket进行网络通信">
-<meta property="og:url" content="http://example.com/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89%E4%BD%BF%E7%94%A8socket%E8%BF%9B%E8%A1%8C%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/index.html">
+<meta property="og:title" content="Linux网络编程：使用socket进行网络通信">
+<meta property="og:url" content="http://example.com/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%9A%E4%BD%BF%E7%94%A8socket%E8%BF%9B%E8%A1%8C%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/index.html">
 <meta property="og:site_name" content="未来道具研究所">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s2.loli.net/2022/05/18/meYvr34Jh1a8cuH.png">
-<meta property="og:image" content="https://s2.loli.net/2022/05/18/lQxe3AFhy7bnNp1.png">
-<meta property="og:image" content="https://s2.loli.net/2022/05/18/wnyDoCO5WGarh48.png">
-<meta property="og:image" content="https://s2.loli.net/2022/05/18/4wGoPHgSBRyYzIv.png">
-<meta property="og:image" content="https://s2.loli.net/2022/05/18/koEG59hj8S7YilT.png">
+<meta property="og:image" content="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/blog/0516-06%20%282%29.png">
+<meta property="og:image" content="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/%E5%9B%BE%E8%A7%A3/%E5%AD%97%E8%8A%82%E5%BA%8F.png">
+<meta property="og:image" content="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/%E5%9B%BE%E8%A7%A3/socket%E5%9C%B0%E5%9D%80.png">
+<meta property="og:image" content="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/%E5%9B%BE%E8%A7%A3/socket%E6%B5%81%E7%A8%8B.png">
+<meta property="og:image" content="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/%E5%9B%BE%E8%A7%A3/UDP%E6%B5%81%E7%A8%8B.png">
 <meta property="article:published_time" content="2022-05-18T13:34:54.000Z">
-<meta property="article:modified_time" content="2022-05-18T15:48:50.254Z">
+<meta property="article:modified_time" content="2022-07-02T08:07:29.242Z">
 <meta property="article:author" content="Lily">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="计算机网络">
 <meta property="article:tag" content="网络编程">
 <meta property="article:tag" content="socket">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s2.loli.net/2022/05/18/meYvr34Jh1a8cuH.png">
+<meta name="twitter:image" content="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/blog/0516-06%20%282%29.png">
 
-<link rel="canonical" href="http://example.com/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89%E4%BD%BF%E7%94%A8socket%E8%BF%9B%E8%A1%8C%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/">
+<link rel="canonical" href="http://example.com/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%9A%E4%BD%BF%E7%94%A8socket%E8%BF%9B%E8%A1%8C%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/">
 
 
 <script id="page-configurations">
@@ -55,7 +55,7 @@
   };
 </script>
 
-  <title>Linux网络编程（一）使用socket进行网络通信 | 未来道具研究所</title>
+  <title>Linux网络编程：使用socket进行网络通信 | 未来道具研究所</title>
   
 
 
@@ -204,7 +204,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89%E4%BD%BF%E7%94%A8socket%E8%BF%9B%E8%A1%8C%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%9A%E4%BD%BF%E7%94%A8socket%E8%BF%9B%E8%A1%8C%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -217,7 +217,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Linux网络编程（一）使用socket进行网络通信
+          Linux网络编程：使用socket进行网络通信
         </h1>
 
         <div class="post-meta">
@@ -227,10 +227,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-05-18 21:34:54 / 修改时间：23:48:50" itemprop="dateCreated datePublished" datetime="2022-05-18T21:34:54+08:00">2022-05-18</time>
+              <time title="创建时间：2022-05-18 21:34:54" itemprop="dateCreated datePublished" datetime="2022-05-18T21:34:54+08:00">2022-05-18</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-02 16:07:29" itemprop="dateModified" datetime="2022-07-02T16:07:29+08:00">2022-07-02</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -245,12 +251,12 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%80%E5%8F%91/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">Linux网络编程</span></a>
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%80%E5%8F%91/%E7%BD%91%E7%BB%9C%E5%B9%B6%E5%8F%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AE%BE%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">网络并发服务器设计</span></a>
                 </span>
             </span>
 
           
-            <span id="/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89%E4%BD%BF%E7%94%A8socket%E8%BF%9B%E8%A1%8C%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/" class="post-meta-item leancloud_visitors" data-flag-title="Linux网络编程（一）使用socket进行网络通信" title="阅读次数">
+            <span id="/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%9A%E4%BD%BF%E7%94%A8socket%E8%BF%9B%E8%A1%8C%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/" class="post-meta-item leancloud_visitors" data-flag-title="Linux网络编程：使用socket进行网络通信" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -265,8 +271,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89%E4%BD%BF%E7%94%A8socket%E8%BF%9B%E8%A1%8C%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89%E4%BD%BF%E7%94%A8socket%E8%BF%9B%E8%A1%8C%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/" itemprop="commentCount"></span>
+    <a title="valine" href="/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%9A%E4%BD%BF%E7%94%A8socket%E8%BF%9B%E8%A1%8C%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%9A%E4%BD%BF%E7%94%A8socket%E8%BF%9B%E8%A1%8C%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -295,7 +301,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><img src="https://s2.loli.net/2022/05/18/meYvr34Jh1a8cuH.png"></p>
+        <p><img src="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/blog/0516-06%20%282%29.png"></p>
 <span id="more"></span>
 
 <h3 id="Socket编程基础"><a href="#Socket编程基础" class="headerlink" title="Socket编程基础"></a>Socket编程基础</h3><h4 id="何为Socket"><a href="#何为Socket" class="headerlink" title="何为Socket"></a>何为Socket</h4><p>所谓socket（套接字），就死对网络中不同主机上的应用进程之间进行双向通信的端点的抽象。一个套接字就是网络上进程通信的一端，提供了应用层进程利用网络协议交换数据的机制。从所处的地位来讲，套接字上联应用进程，下联网络协议栈，是应用程序通过网络协议进行通信的接口，是应用程序与网络协议根进行交互的接口。</p>
@@ -304,7 +310,7 @@
 <h4 id="字节序"><a href="#字节序" class="headerlink" title="字节序"></a>字节序</h4><h5 id="什么是字节序？"><a href="#什么是字节序？" class="headerlink" title="什么是字节序？"></a>什么是字节序？</h5><p>现代cpu累加器一次能装载4字节（32位机），即一个整数，这4字节的排列顺序将影响其读取的数值。这就引起了通信领域的一个重要问题：通信双方交流的信息单元以什么样的顺序传输。如果通信双方信息单元顺序规则不一致，通信双方将无法正确的编码解码从而导致通信失败。字节序顾名思义，即字节的顺序，就是字节在内存中的存放顺序。字节序分为大端字节序和小端字节序。</p>
 <p><strong>大端字节序：</strong>高位字节存在低地址，低位字节存在高地址。</p>
 <p><strong>小端字节序：</strong>高位字节存在高地址，低位字节存在低地址。</p>
-<p><img src="https://s2.loli.net/2022/05/18/lQxe3AFhy7bnNp1.png"></p>
+<p><img src="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/%E5%9B%BE%E8%A7%A3/%E5%AD%97%E8%8A%82%E5%BA%8F.png"></p>
 <h5 id="字节序转换函数"><a href="#字节序转换函数" class="headerlink" title="字节序转换函数"></a>字节序转换函数</h5><p>当格式化的数据在两台字节序不同的主机间传输，必然会导致数据的解释错误，解决方案是发送端总是把发送数据转换成大端字节序，接收端根据自身的字节序判断是否转换。</p>
 <p>网络字节序是TCP&#x2F;IP中规定好的一种数据表示方式，与CPU和操作系统类型无关，从而保证数据在不同主机之间的数据传输能够正确被解释。网络字节序采用大端字节序。BSD Socket提供了封装好的转换接口。包括从主机字节序到网络字节序的转换函数：htonl，htonl，ntohs，ntohl。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//	h - host 主机字节序</span></span><br><span class="line"><span class="comment">//	to - 转换成什么</span></span><br><span class="line"><span class="comment">//	n - network 网络字节序</span></span><br><span class="line"><span class="comment">//	s - short unsigned short</span></span><br><span class="line"><span class="comment">//	l - long unsigned int</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 转换端口（端口号16位,short）</span></span><br><span class="line"><span class="type">uint16_t</span> <span class="title function_">htons</span><span class="params">(<span class="type">uint16_t</span> hostshort)</span>;</span><br><span class="line"><span class="type">uint16_t</span> <span class="title function_">ntohs</span><span class="params">(<span class="type">uint16_t</span> netshort)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转换IP地址（IP是32位）</span></span><br><span class="line"><span class="type">uint32_t</span> <span class="title function_">htonl</span><span class="params">(<span class="type">uint32_t</span> hostlong)</span>;</span><br><span class="line"><span class="type">uint32_t</span> <span class="title function_">ntohl</span><span class="params">(<span class="type">uint32_t</span> netlong)</span>;</span><br></pre></td></tr></table></figure>
@@ -359,7 +365,7 @@
 </tr>
 </tbody></table>
 <h5 id="专用Socket地址"><a href="#专用Socket地址" class="headerlink" title="专用Socket地址"></a>专用Socket地址</h5><p>很多网络编程函数诞生早于IPV4协议，那时候用的都是sockaddr结构体，为了向前兼容，sockaddr退化成了void*的作用，传递一个地址给函数，至于该地址是sockaddr_in还是sockaddr_in6，由地址族决定，然后函数内部再强制转化为所需类型。</p>
-<p><img src="https://s2.loli.net/2022/05/18/wnyDoCO5WGarh48.png"></p>
+<p><img src="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/%E5%9B%BE%E8%A7%A3/socket%E5%9C%B0%E5%9D%80.png"></p>
 <h6 id="Unix本地协议族："><a href="#Unix本地协议族：" class="headerlink" title="Unix本地协议族："></a>Unix本地协议族：</h6><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/un.h&gt;</span></span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_un</span>&#123;</span></span><br><span class="line">    <span class="type">sa_family_t</span> sin_family;</span><br><span class="line">    <span class="type">char</span> sun_path[<span class="number">108</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h6 id="TCP-x2F-IP协议族："><a href="#TCP-x2F-IP协议族：" class="headerlink" title="TCP&#x2F;IP协议族："></a>TCP&#x2F;IP协议族：</h6><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span>&#123;</span></span><br><span class="line">    <span class="type">in_addr_t</span> s_addr;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -420,7 +426,7 @@
 <li>连接成功，客户端可以直接和服务器通信。</li>
 <li>通信结束，断开连接。</li>
 </ol>
-<p><img src="https://s2.loli.net/2022/05/18/4wGoPHgSBRyYzIv.png"></p>
+<p><img src="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/%E5%9B%BE%E8%A7%A3/socket%E6%B5%81%E7%A8%8B.png"></p>
 <h4 id="Socket-API"><a href="#Socket-API" class="headerlink" title="Socket API"></a>Socket API</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建套接字，return监听的socket fd</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">socket</span><span class="params">(<span class="type">int</span> domain, <span class="type">int</span> type, <span class="type">int</span> protocol)</span>;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将socket和本地IP，端口号绑定</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">bind</span><span class="params">(<span class="type">int</span> sockfd, <span class="type">const</span> <span class="keyword">struct</span> sockaddr *addr, <span class="type">socklen_t</span> addrlen)</span>;</span><br></pre></td></tr></table></figure>
@@ -448,7 +454,7 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/type.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="comment">// 设置套接字属性（不仅是端口复用）</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">setsockopt</span><span class="params">(<span class="type">int</span> sockfd, <span class="type">int</span> level, <span class="type">int</span> optname, <span class="type">const</span> <span class="type">void</span>* optval, <span class="type">socklen_t</span> optlen)</span>;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	level：级别- SOL_SOCKET(端口复用的级别)</span></span><br><span class="line"><span class="comment">	optname：</span></span><br><span class="line"><span class="comment">		- SO_REUSEADDR;</span></span><br><span class="line"><span class="comment">		- SO_REUSEPORT;</span></span><br><span class="line"><span class="comment">	optval: 1可以复用，0不可复用</span></span><br><span class="line"><span class="comment">	optlen：optval参数大小</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 端口复用设置在服务器绑定端口之前</span></span><br></pre></td></tr></table></figure>
 
 <h4 id="UDP通信"><a href="#UDP通信" class="headerlink" title="UDP通信"></a>UDP通信</h4><p>UDP由于不需要握手建立连接，因此通信流程的编写相对TCP更为简单直接。</p>
-<p><img src="https://s2.loli.net/2022/05/18/koEG59hj8S7YilT.png"></p>
+<p><img src="https://blog-image-1304227503.cos.ap-nanjing.myqcloud.com/img/%E5%9B%BE%E8%A7%A3/UDP%E6%B5%81%E7%A8%8B.png"></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys.socket.h&gt;</span></span></span><br><span class="line"><span class="type">ssize_t</span> <span class="title function_">sendto</span><span class="params">(<span class="type">int</span> sockfd, <span class="type">const</span> <span class="type">void</span>* buf, <span class="type">size_t</span> len, <span class="type">int</span> flags, <span class="type">const</span> <span class="keyword">struct</span> sockaddr* dest_addr, <span class="type">socklen_t</span> addrlen)</span>;</span><br><span class="line"><span class="type">ssize_t</span> <span class="title function_">recvfrom</span><span class="params">(<span class="type">int</span> sockfd, <span class="type">void</span>* buf, <span class="type">size_t</span> len, <span class="type">int</span> flags, <span class="keyword">struct</span> sockaddr* src_addr, <span class="type">socklen_t</span> *addrlen)</span>;</span><br></pre></td></tr></table></figure>
 
 <h5 id="广播"><a href="#广播" class="headerlink" title="广播"></a>广播</h5><p>向子网中所有的计算机发送消息，每个广播消息包含一个特殊IP地址（广播地址），该地址子网内主机标志位全部为1。广播只能在局域网使用，并且客户端需要绑定服务器广播的端口。</p>
@@ -516,8 +522,8 @@
       <i class="fa fa-chevron-left"></i> Linux系统编程（八）多线程编程
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/05/18/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/" rel="next" title="Linux网络编程（二）IO多路复用">
-      Linux网络编程（二）IO多路复用 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/05/18/%E5%B9%B6%E5%8F%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AE%BE%E8%AE%A1%EF%BC%88%E4%B8%80%EF%BC%89IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/" rel="next" title="并发服务器设计（一）IO多路复用">
+      并发服务器设计（一）IO多路复用 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -607,7 +613,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -648,12 +654,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">30k</span>
+    <span title="站点总字数">32k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">28 分钟</span>
+    <span title="站点阅读时长">29 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
